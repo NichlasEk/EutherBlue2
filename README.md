@@ -55,6 +55,20 @@ Avkoda alla extraherade WTS-prompter till WAV:
 
 Resultaten hamnar under `artifacts/` och ignoreras av Git. Se [analysrapporten](reports/initial-firmware-analysis-2026-09-03.md) för hashvärden, filinventering och nästa säkra steg.
 
+## Provröster
+
+Skapa tre lokala versioner av Christian Grosshandlares Bluetooth-anslutningsfras
+via EutherLink/VoxCPM2:
+
+```bash
+./tools/generate_voice_previews.py
+```
+
+Verktyget använder den helt syntetiska Christian-referensen från EutherVox och
+skapar både käll-WAV och headsetanpassad 16 kHz stereo-WAV under
+`artifacts/previews/`. Det packar inte firmware och ansluter aldrig till
+headsetet.
+
 ## Säkerhetsgräns
 
 Den hämtade V0.2.9-filen är en officiell referensbild, **inte en verifierad backup av den version som sitter i just vårt headset**. Innan en framtida modifiering får flashas måste vi:
