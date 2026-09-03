@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "id": "hp206-jl708n",
+  "manufacturer": "UGREEN",
+  "model": "Studio Pro / HP206",
+  "status": "working",
+  "hardware": {
+    "chipFamily": "JieLi JL708N",
+    "firmwarePlatform": "JL7083F-B412",
+    "testedDevices": 1
+  },
+  "transport": {
+    "control": "bluetooth-classic-spp",
+    "ota": "jieli-rcsp-v2",
+    "usbData": false,
+    "otaClient": "JLOTA 1.9.0 (10905)"
+  },
+  "firmware": {
+    "format": "jieli-ufw",
+    "stock": {
+      "version": "0.2.9",
+      "filename": "HP206_UGREEN_Studio_Pro_V0.2.9.ufw",
+      "path": "artifacts/original/firmware/HP206_UGREEN_Studio_Pro_V0.2.9.ufw",
+      "size": 2181056,
+      "sha256": "41faae11340001e1d7a5013758296b839e4bbe5c3e86dc859ba9d5aa2fc9a1b6"
+    },
+    "extractedPath": "artifacts/extracted/studio-pro-v0.2.9",
+    "decryptedFlashPath": "artifacts/extracted/studio-pro-v0.2.9/decrypted.bin",
+    "banks": {
+      "entries": ["flash.bin", "flash2.bin"],
+      "bootInfo": {
+        "offset": 4096,
+        "size": 32,
+        "dataCrcOffset": 4,
+        "dataLengthOffset": 8,
+        "cipherKey": 65535
+      }
+    }
+  },
+  "voice": {
+    "container": "tone_en",
+    "format": "jieli-jlfs-wtgv2",
+    "originalPath": "artifacts/extracted/studio-pro-v0.2.9/files/tone_en",
+    "promptCount": 20,
+    "preserveLayout": true,
+    "bitrate": 8000,
+    "tempoMap": "voice-banks/christian-grosshandlare-irriterad-fixed-layout.tempo",
+    "previewPath": "artifacts/previews/christian-grosshandlare-irriterad/full-bank"
+  },
+  "build": {
+    "driver": "jieli-ufw-boot-crc-v1",
+    "voiceBank": "christian-grosshandlare-irriterad",
+    "outputDirectory": "artifacts/build/christian-grosshandlare-irriterad",
+    "outputFilename": "HP206_UGREEN_Studio_Pro_V0.2.9_Christian-BOOTCRC-v4-WORKING.ufw",
+    "verifiedSha256": "4e0a8559c2e60f3625821c81d0f2b078043ef79297bff5009f365b4e50968faa"
+  },
+  "recovery": {
+    "stockOtaTested": true,
+    "modifiedOtaTested": true,
+    "automaticHardRollbackTested": false,
+    "report": "reports/christian-bootcrc-v4-2026-09-03.md"
+  }
+}

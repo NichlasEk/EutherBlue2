@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/NichlasEk/EutherBlue/profiles/schema.json",
+  "title": "EutherBlue headset profile",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "id",
+    "manufacturer",
+    "model",
+    "status",
+    "hardware",
+    "transport",
+    "firmware",
+    "voice",
+    "build",
+    "recovery"
+  ],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]+$"},
+    "manufacturer": {"type": "string", "minLength": 1},
+    "model": {"type": "string", "minLength": 1},
+    "status": {"enum": ["research", "buildable", "working"]},
+    "hardware": {"type": "object"},
+    "transport": {"type": "object"},
+    "firmware": {"type": "object"},
+    "voice": {"type": "object"},
+    "build": {"type": "object"},
+    "recovery": {"type": "object"}
+  },
+  "additionalProperties": false
+}

@@ -120,11 +120,19 @@ def replace_flash_entry_crcs(
     image[:UFW_HEADER_SIZE] = crypt_copy(header)
 
 
-def parse_boot_info(flash_data: bytes, image_name: str) -> tuple[bytearray, int, int]:
-    end = BOOT_INFO_OFFSET + BOOT_INFO_SIZE
+def parse_boot_info(
+    flash_data: bytes,
+    image_name: str,
+    boot_info_offset: int,
+    boot_info_size: int,
+    data_crc_offset: int,
+    data_length_offset: int,
+    cipher_key: int,
+) -> tuple[bytearray, int, int]:
+    end = boot_info_offset + boot_info_size
     if end > len(flash_data):
         raise ValueError(f"{image_name}: bootinformationen går utanför bilden")
-    plain = bytearray(crypt_copy(flash_data[BOOT_INFO_OFFSET:end]))
+    plain = bytearray(crypt_copy(flash_data[boot_info_offset:end], cipher_key))
     stored_header_crc = struct.unpack_from("<H", plain, 0)[0]
     calculated_header_crc = jl_crc16(plain[2:])
     if stored_header_crc != calculated_header_crc:
@@ -132,8 +140,8 @@ def parse_boot_info(flash_data: bytes, image_name: str) -> tuple[bytearray, int,
             f"{image_name}: fel boot-info-header-CRC: "
             f"0x{stored_header_crc:04x} != 0x{calculated_header_crc:04x}"
         )
-    stored_data_crc = struct.unpack_from("<H", plain, BOOT_INFO_DATA_CRC_OFFSET)[0]
-    data_length = struct.unpack_from("<I", plain, BOOT_INFO_DATA_LENGTH_OFFSET)[0]
+    stored_data_crc = struct.unpack_from("<H", plain, data_crc_offset)[0]
+    data_length = struct.unpack_from("<I", plain, data_length_offset)[0]
     data_start = end
     data_end = data_start + data_length
     if data_length == 0 or data_end > len(flash_data):
@@ -151,21 +159,36 @@ def update_boot_info_crc(
     image: bytearray,
     entry: UfwEntry,
     original_flash: bytes,
+    boot_info_offset: int,
+    boot_info_size: int,
+    data_crc_offset: int,
+    data_length_offset: int,
+    cipher_key: int,
 ) -> tuple[int, int, int]:
-    plain, old_data_crc, data_length = parse_boot_info(original_flash, entry.name)
-    data_start = entry.offset + BOOT_INFO_OFFSET + BOOT_INFO_SIZE
+    plain, old_data_crc, data_length = parse_boot_info(
+        original_flash,
+        entry.name,
+        boot_info_offset,
+        boot_info_size,
+        data_crc_offset,
+        data_length_offset,
+        cipher_key,
+    )
+    data_start = entry.offset + boot_info_offset + boot_info_size
     data_end = data_start + data_length
     new_data_crc = jl_crc16(image[data_start:data_end])
-    struct.pack_into("<H", plain, BOOT_INFO_DATA_CRC_OFFSET, new_data_crc)
+    struct.pack_into("<H", plain, data_crc_offset, new_data_crc)
     struct.pack_into("<H", plain, 0, jl_crc16(plain[2:]))
-    boot_start = entry.offset + BOOT_INFO_OFFSET
-    image[boot_start : boot_start + BOOT_INFO_SIZE] = crypt_copy(plain)
+    boot_start = entry.offset + boot_info_offset
+    image[boot_start : boot_start + boot_info_size] = crypt_copy(plain, cipher_key)
 
-    recovered = crypt_copy(image[boot_start : boot_start + BOOT_INFO_SIZE])
+    recovered = crypt_copy(
+        image[boot_start : boot_start + boot_info_size], cipher_key
+    )
     if jl_crc16(recovered[2:]) != struct.unpack_from("<H", recovered, 0)[0]:
         raise ValueError(f"{entry.name}: ny boot-info-header-CRC kunde inte verifieras")
     if jl_crc16(image[data_start:data_end]) != struct.unpack_from(
-        "<H", recovered, BOOT_INFO_DATA_CRC_OFFSET
+        "<H", recovered, data_crc_offset
     )[0]:
         raise ValueError(f"{entry.name}: ny boot-info-data-CRC kunde inte verifieras")
     return old_data_crc, new_data_crc, data_length
@@ -176,6 +199,11 @@ def patch_firmware(
     decrypted_flash: bytes,
     original_tone: bytes,
     replacement_tone: bytes,
+    boot_info_offset: int = BOOT_INFO_OFFSET,
+    boot_info_size: int = BOOT_INFO_SIZE,
+    boot_info_data_crc_offset: int = BOOT_INFO_DATA_CRC_OFFSET,
+    boot_info_data_length_offset: int = BOOT_INFO_DATA_LENGTH_OFFSET,
+    boot_info_cipher_key: int = UFW_KEY,
 ) -> tuple[bytes, dict]:
     if len(replacement_tone) != len(original_tone):
         raise ValueError("ersättningscontainern måste ha exakt samma storlek som originalet")
@@ -225,11 +253,21 @@ def patch_firmware(
         result,
         flash_entry,
         original_ufw[flash_entry.offset : flash_entry.offset + flash_entry.size],
+        boot_info_offset,
+        boot_info_size,
+        boot_info_data_crc_offset,
+        boot_info_data_length_offset,
+        boot_info_cipher_key,
     )
     mirror_boot_crc = update_boot_info_crc(
         result,
         mirror_entry,
         original_ufw[mirror_entry.offset : mirror_entry.offset + mirror_entry.size],
+        boot_info_offset,
+        boot_info_size,
+        boot_info_data_crc_offset,
+        boot_info_data_length_offset,
+        boot_info_cipher_key,
     )
     if flash_boot_crc != mirror_boot_crc:
         raise ValueError("boot-info-metadata skiljer sig mellan dubbelbankerna")
@@ -287,7 +325,11 @@ def patch_firmware(
         "mirrorFlashSize": mirror_entry.size,
         "originalMirrorFlashCrc": f"0x{mirror_entry.data_crc:04x}",
         "rebuiltMirrorFlashCrc": f"0x{new_mirror_crc:04x}",
-        "bootInfoOffsetInFlash": BOOT_INFO_OFFSET,
+        "bootInfoOffsetInFlash": boot_info_offset,
+        "bootInfoSize": boot_info_size,
+        "bootInfoDataCrcOffset": boot_info_data_crc_offset,
+        "bootInfoDataLengthOffset": boot_info_data_length_offset,
+        "bootInfoCipherKey": f"0x{boot_info_cipher_key:04x}",
         "bootInfoDataLength": flash_boot_crc[2],
         "originalBootInfoDataCrc": f"0x{flash_boot_crc[0]:04x}",
         "rebuiltBootInfoDataCrc": f"0x{flash_boot_crc[1]:04x}",
@@ -313,6 +355,20 @@ def main() -> int:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--manifest", type=Path)
     parser.add_argument("--require-identical", action="store_true")
+    integer = lambda value: int(value, 0)
+    parser.add_argument("--boot-info-offset", type=integer, default=BOOT_INFO_OFFSET)
+    parser.add_argument("--boot-info-size", type=integer, default=BOOT_INFO_SIZE)
+    parser.add_argument(
+        "--boot-info-data-crc-offset",
+        type=integer,
+        default=BOOT_INFO_DATA_CRC_OFFSET,
+    )
+    parser.add_argument(
+        "--boot-info-data-length-offset",
+        type=integer,
+        default=BOOT_INFO_DATA_LENGTH_OFFSET,
+    )
+    parser.add_argument("--boot-info-cipher-key", type=integer, default=UFW_KEY)
     args = parser.parse_args()
 
     rebuilt, manifest = patch_firmware(
@@ -320,6 +376,11 @@ def main() -> int:
         args.decrypted_flash.read_bytes(),
         args.original_tone.read_bytes(),
         args.replacement_tone.read_bytes(),
+        args.boot_info_offset,
+        args.boot_info_size,
+        args.boot_info_data_crc_offset,
+        args.boot_info_data_length_offset,
+        args.boot_info_cipher_key,
     )
     if args.require_identical and not manifest["byteIdentical"]:
         raise SystemExit("UFW-roundtrippen blev inte byte-identisk")

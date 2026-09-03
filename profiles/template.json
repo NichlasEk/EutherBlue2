@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "id": "replace-model-id",
+  "manufacturer": "Replace manufacturer",
+  "model": "Replace model",
+  "status": "research",
+  "hardware": {
+    "chipFamily": "unknown",
+    "firmwarePlatform": "unknown",
+    "testedDevices": 0
+  },
+  "transport": {
+    "control": "unknown",
+    "ota": "unknown",
+    "usbData": false,
+    "otaClient": "unknown"
+  },
+  "firmware": {
+    "format": "unknown",
+    "stock": {
+      "version": "unknown",
+      "filename": "stock.bin",
+      "path": "artifacts/original/replace-model-id/stock.bin",
+      "size": 0,
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "extractedPath": "artifacts/extracted/replace-model-id",
+    "decryptedFlashPath": "artifacts/extracted/replace-model-id/decrypted.bin",
+    "banks": {
+      "entries": ["flash.bin", "flash2.bin"],
+      "bootInfo": {
+        "offset": 4096,
+        "size": 32,
+        "dataCrcOffset": 4,
+        "dataLengthOffset": 8,
+        "cipherKey": 65535
+      }
+    }
+  },
+  "voice": {
+    "container": "tone_en",
+    "format": "unknown",
+    "originalPath": "artifacts/extracted/replace-model-id/files/tone_en",
+    "promptCount": 0,
+    "preserveLayout": true,
+    "bitrate": 8000,
+    "tempoMap": "voice-banks/replace-model-id.tempo",
+    "previewPath": "artifacts/previews/replace-model-id"
+  },
+  "build": {
+    "driver": "jieli-ufw-boot-crc-v1",
+    "voiceBank": "replace-voice-bank",
+    "outputDirectory": "artifacts/build/replace-model-id",
+    "outputFilename": "replace-model-id-custom.ufw",
+    "verifiedSha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "recovery": {
+    "stockOtaTested": false,
+    "modifiedOtaTested": false,
+    "automaticHardRollbackTested": false,
+    "report": "reports/replace-model-id-recovery.md"
+  }
+}

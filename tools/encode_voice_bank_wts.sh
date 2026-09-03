@@ -10,6 +10,7 @@ INPUT="${1:-artifacts/previews/christian-grosshandlare-irriterad/full-bank}"
 OUTPUT="${2:-artifacts/build/christian-grosshandlare-irriterad/wts}"
 BITRATE="${EUTHERBLUE_WTS_BITRATE:-12000}"
 TEMPO_MAP="${EUTHERBLUE_WTS_TEMPO_MAP:-}"
+EXPECTED_PROMPTS="${EUTHERBLUE_EXPECTED_PROMPTS:-20}"
 CACHE_DIR="${EUTHERBLUE_CACHE_DIR:-.cache}"
 TOOLS_DIR="$CACHE_DIR/jieli-tone-tools"
 ENCODER="$TOOLS_DIR/wtgv2_encode.exe"
@@ -24,6 +25,10 @@ for command_name in curl ffmpeg find sha256sum wine winepath; do
 done
 [[ "$BITRATE" =~ ^[0-9]+$ ]] && (( BITRATE >= 8000 && BITRATE <= 24000 )) || {
     echo "EUTHERBLUE_WTS_BITRATE måste vara 8000–24000." >&2
+    exit 1
+}
+[[ "$EXPECTED_PROMPTS" =~ ^[1-9][0-9]*$ ]] || {
+    echo "EUTHERBLUE_EXPECTED_PROMPTS måste vara ett positivt heltal." >&2
     exit 1
 }
 [[ -d "$INPUT" ]] || {
@@ -100,8 +105,8 @@ while IFS= read -r -d '' source_file; do
     printf '%-14s %6d byte  tempo %s\n' "$prompt" "$size" "$tempo"
 done < <(find "$INPUT" -maxdepth 1 -type f -name '*-16k-stereo.wav' -print0 | sort -z)
 
-[[ "$encoded" -eq 20 ]] || {
-    echo "Väntade 20 prompter men kodade $encoded." >&2
+[[ "$encoded" -eq "$EXPECTED_PROMPTS" ]] || {
+    echo "Väntade $EXPECTED_PROMPTS prompter men kodade $encoded." >&2
     exit 1
 }
 echo "Kodade $encoded WTS-filer vid $BITRATE bit/s, totalt $total_bytes byte: $OUTPUT"

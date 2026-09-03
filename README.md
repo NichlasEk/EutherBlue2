@@ -1,6 +1,8 @@
 # EutherBlue
 
-Skrivskyddad analys av firmware och röstprompter i **UGREEN Studio Pro / HP206**.
+Verktyg och modellprofiler för att undersöka, bygga och verifiera anpassade
+röstprompter i Bluetooth-headset. **UGREEN Studio Pro / HP206** är den första
+fysiskt fungerande profilen.
 
 ## Bekräftat
 
@@ -13,7 +15,31 @@ Skrivskyddad analys av firmware och röstprompter i **UGREEN Studio Pro / HP206*
 - Firmwarefilsystemet innehåller separata engelska och kinesiska promptbibliotek. De engelska filerna inkluderar bland annat `power_on.wts`, `power_off.wts`, `bt_conn.wts`, `low_power.wts`, `anc_on.wts` och `anc_off.wts`.
 - `.wts` är JieLis WTGv2/SILK-baserade ljudformat. JieLis officiella Windowsverktyg kan avkoda filerna till WAV via Wine.
 
-Inget verktyg i detta repo skriver till headsetet. OTA-flashning och modifierad ompackning är medvetet inte implementerade ännu.
+Byggverktygen skriver enbart lokala filer. Repot innehåller ingen automatisk
+Bluetooth- eller OTA-flashning; den verifierade HP206-filen installerades
+manuellt med den pinnade Android-klienten.
+
+## Modellprofiler
+
+Hårdvaruspecifika fakta ligger i `profiles/<modell-id>/profile.json`, skilda
+från röstbanker och generella byggverktyg. Visa och kontrollera profiler med:
+
+```bash
+./tools/eutherblue.py list
+./tools/eutherblue.py show hp206-jl708n
+./tools/eutherblue.py check hp206-jl708n --artifacts
+```
+
+Bygg den fysiskt verifierade HP206-firmwaren helt från profilen:
+
+```bash
+./tools/build_profile_firmware.sh hp206-jl708n
+```
+
+Bygget måste återskapa den kända SHA-256-hashen exakt. En ny lur börjar som
+`research`, blir `buildable` först när format och integritetslager är förstådda,
+och blir `working` först efter fysisk verifiering. Se
+[profilguiden](profiles/README.md) och [JSON-schemat](profiles/schema.json).
 
 Läs headsetets installerade produkt-firmware med UGREENs enda tillåtna
 `GET_VERSION`-kommando:
@@ -112,9 +138,9 @@ Verifiera en byte-identisk roundtrip av hela UFW-filen:
   --require-identical
 ```
 
-Byggaren ändrar bara den fasta röstregionen, uppdaterar `flash.bin`-postens CRC
-och räknar om UFW-headerns kontrollsummor. Den har ingen Bluetooth- eller
-OTA-funktion.
+Byggaren ändrar bara den fasta röstregionen i båda firmwarebankerna, räknar om
+bankernas krypterade boot-info-CRC:er samt UFW-posternas och headerns
+kontrollsummor. Den har ingen Bluetooth- eller OTA-funktion.
 
 Kör hela det verifierade Christian-bygget med ett kommando:
 
