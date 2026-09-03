@@ -8,13 +8,12 @@ Installerad produkt-firmware: V0.2.5
 
 ## Slutsats
 
-Den modifierade firmwaren ska **inte flashas ännu**. Vi har en verifierad
-officiell V0.2.9-fil och headsetet rapporterar JieLi dubbelbanks-OTA, men två
-olika återställningsnivåer återstår att prova:
+Den officiella mjuka återställningsvägen med V0.2.9 är nu fysiskt testad och
+fungerande. Två återställningsbegränsningar kvarstår:
 
-1. **Mjuk återställning:** headsetet startar och Bluetooth fungerar, varefter
-   den orörda UGREEN V0.2.9-filen installeras igen med en verifierad OTA-klient.
-2. **Hård återställning:** den nya banken startar inte. Då måste boot-ROM/
+1. Den tidigare installerade V0.2.5-bilden går inte att hämta från UGREENs
+   publika API och har inte dumpats från headsetet.
+2. **Hård återställning:** om den nya banken inte startar måste boot-ROM/
    bootloader automatiskt välja den gamla banken, eller så behövs en fysisk
    programmeringsväg. Detta är ännu inte verifierat på HP206.
 
@@ -38,7 +37,8 @@ olika återställningsnivåer återstår att prova:
 - UGREENs publika `check_upgrade`-API returnerar senaste V0.2.9 när klientens
   `versionCode` motsvarar V0.2.5. API:t erbjuder ingen historisk V0.2.5-fil.
 
-Inget av ovanstående skickade ett OTA-kommando eller skrev till headsetet.
+Det fysiska stock-testet och dess omstart finns dokumenterade i
+[`official-v0.2.9-ota-2026-09-03.md`](official-v0.2.9-ota-2026-09-03.md).
 
 ## Så etablerar vi återställningsvägen
 
@@ -95,10 +95,10 @@ stock-testet; vår striktare, modellspecifika klient återstår att bygga.
 | Enheten rapporterar att separat bootloader-handoff inte behövs | PASS |
 | Officiell JieLi-klient ansluter och läser målinfo över SPP | PASS |
 | Exakt återställningsbild av installerad V0.2.5 sparad | STOP |
-| Stock V0.2.9-restoration testad på detta headset | STOP |
+| Stock V0.2.9-restoration testad på detta headset | PASS |
 | Automatisk hård rollback testad på detta headset | STOP |
 
-Android/SPP-resultatet och den kvarvarande auth-timeouten finns i
+Android/SPP-resultatet och den lösta auth-konfigurationen finns i
 [Android-preflightrapporten](android-spp-preflight-2026-09-03.md).
 
 ## Källor

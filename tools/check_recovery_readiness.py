@@ -89,7 +89,9 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         # These may only become true after documented physical tests.  They are
         # intentionally not inferred from a flag, SDK source, or successful build.
         "installedV025RecoveryImageSaved": False,
-        "officialStockRestoreTestedOnThisHeadset": False,
+        # Physically completed and documented in
+        # reports/official-v0.2.9-ota-2026-09-03.md.
+        "officialStockRestoreTestedOnThisHeadset": True,
         "automaticHardRollbackTestedOnThisHeadset": False,
     }
 
