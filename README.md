@@ -151,8 +151,8 @@ ingenting, använder inte ADB eller Bluetooth och kan inte starta OTA.
 
 Den officiella klientens första hårdvarupreflight finns dokumenterad i
 [Android/SPP-rapporten](reports/android-spp-preflight-2026-09-03.md). SPP och
-`GetTargetInfo` fungerar, men en timeout i den generiska certifieringshandshaken
-måste lösas innan ett stock-test får starta.
+`GetTargetInfo` fungerar. Klienten är inställd med samma SPP- och
+auth-konfiguration som UGREENs egen implementation; ingen OTA har startats.
 
 ## Säkerhetsgräns
 

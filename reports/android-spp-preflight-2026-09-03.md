@@ -34,9 +34,19 @@ bekräftade
 
 ## SPP- och RCSP-bevis
 
-Den sanerade SDK-loggen visade följande ordning:
+Den första körningen med JieLi-demots standardinställning gav en timeout i dess
+generiska device-certification-handshake. UGREEN-appens dekompilerade
+`JLOTAManager` visar däremot den produktspecifika konfigurationen:
 
-1. klienten konfigurerades med `priority=1`, device authentication på och utan
+- SPP-prioritet (`setPriority(1)`);
+- SDK-återanslutning av (`setUseReconnect(false)`);
+- device certification av (`setUseAuthDevice(false)`);
+- JieLis serverfunktion av (`setUseJLServer(false)`).
+
+Efter att exempelklienten ställts in likadant visade den sanerade SDK-loggen
+följande ordning:
+
+1. klienten konfigurerades med `priority=1`, `isUseAuthDevice=false` och utan
    firmware path/data;
 2. SPP öppnades mot den parade Studio Pro-enheten;
 3. SPP rapporterade anslutning OK;
@@ -48,16 +58,13 @@ Den sanerade SDK-loggen visade följande ordning:
 Råloggen sparas inte i Git eftersom enhetsresponsen innehåller en auth-nyckel.
 Ingen auth-nyckel återges i denna rapport.
 
+Ingen `RcspAuth`-start eller auth-timeout inträffade i den andra körningen.
+Detta löser konfigurationsavvikelsen i den första preflighten.
+
 ## Kvarvarande stoppunkt
 
-Den generiska JieLi-klientens certifieringshandshake gav
-`Auth device timeout` (kod 40977). Klienten fortsatte därefter och lyckades
-läsa `GetTargetInfo`, men det bevisar inte att den kan genomföra hela OTA:n.
-
-Före ett stock-test måste vi avgöra om HP206 ska använda:
-
-- JieLi-SDK med device certification avstängd, som motsvarar den redan
-  fungerande okrypterade RCSP-läsningen; eller
-- UGREEN-appens produktspecifika autentiseringsflöde.
+Transport- och auth-konfigurationen matchar nu UGREENs egen implementation,
+men vi har ännu inte låtit SDK:n kontrollera eller överföra en firmwarefil.
+Dessutom saknas fortfarande en exakt återställningsbild av installerad V0.2.5.
 
 Vi ska inte starta OTA bara för att SPP-preflighten blev grön.
