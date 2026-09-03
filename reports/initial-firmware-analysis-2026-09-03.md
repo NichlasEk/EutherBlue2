@@ -21,6 +21,25 @@ UGREENs Androidapp V2.5.0 visar att modellen använder OTA-ID `studio_pro_ota`. 
 
 Den officiella app-APK som användes för analysen var V2.5.0 (versionCode 917), 327 235 177 byte, MD5 `62fc812eb64edd1e066b90305894e728` och SHA-256 `5191d0aa93b973bd876ecb938d50dfa84fd99850db77d6dc3eade553390ba5f1`.
 
+## Installerad version, läst från headsetet
+
+Två typer av avgränsade läsfrågor kördes mot headsetet över Bluetooth Classic SPP:
+
+| Fråga | Skickat per anrop | Verifierat resultat |
+|---|---:|---|
+| UGREEN UG1 `GET_VERSION` | 8 byte | Produkt-firmware `0.2.5` |
+| JieLi RCSP `GetTargetInfo` | 14 byte | SDK-målversion `V_0.0.0.1`, projekt `jl_sdk_ac697_publish` |
+
+UGREEN-svaret var `DD EE FF 01 01 06 00 02 05 00 00 00 61 ED`.
+Svarslängden, successflaggan och CRC16/CCITT-FALSE validerades innan
+versionsbytesen `00 02 05` tolkades som `0.2.5`. JieLi-fältet är en generisk
+SDK-/transportversion och inte headsetets produkt-firmware.
+
+Den installerade versionen är alltså äldre än den officiella referensfilen
+V0.2.9. `GET_VERSION` kördes två gånger för att verifiera det färdiga verktygets
+hela flöde, så totalt skickades 30 läsbytes under sessionen (14 + 8 + 8). Inga
+uppdaterings-, inställnings- eller OTA-kommandon skickades.
+
 ## Firmwarestruktur
 
 Uppackning gjordes med `jl-misctools` på commit `0a5b12db0ef38f3042acffbe2452730a37fd2405`.
@@ -49,7 +68,6 @@ Det betyder att egna röster är tekniskt realistiska. Det återstår dock två 
 
 ## Vad som inte har gjorts
 
-- Inga bytes har skickats till headsetets RCSP/SPP-kanal.
 - Headsetet har inte satts i OTA- eller DFU-läge.
 - Ingen firmware har flashats.
 - V0.2.9 är inte påstådd vara en dump av den installerade versionen.
@@ -57,10 +75,10 @@ Det betyder att egna röster är tekniskt realistiska. Det återstår dock två 
 
 ## Nästa säkra milstolpe
 
-1. Implementera endast RCSP-kommandot som läser modell- och firmwareversion över SPP.
-2. Ta fram en reproducerbar WTS-encoderkedja och jämför original → WAV → WTS mot kända prompter.
-3. Implementera en packare som uppdaterar varje inre fil-CRC, bibliotekets CRC, firmwarebildens CRC och UFW-containerns CRC.
-4. Gör en byte-för-byte roundtrip där en ompackad men oförändrad firmware blir identisk med originalet.
+1. Ta fram en reproducerbar WTS-encoderkedja och jämför original → WAV → WTS mot kända prompter.
+2. Implementera en packare som uppdaterar varje inre fil-CRC, bibliotekets CRC, firmwarebildens CRC och UFW-containerns CRC.
+3. Gör en byte-för-byte roundtrip där en ompackad men oförändrad firmware blir identisk med originalet.
+4. Kartlägg och testa återställningsvägen för den installerade V0.2.5 innan någon skrivning övervägs.
 5. Först därefter bedöma om ett modifierat paket kan testas, med laddat batteri och verifierad återställningsväg.
 
 ## Källor

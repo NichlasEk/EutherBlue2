@@ -7,11 +7,31 @@ Skrivskyddad analys av firmware och röstprompter i **UGREEN Studio Pro / HP206*
 - Headsetet använder Bluetooth Classic SPP för appstyrning och OTA. USB-C-porten exponerar ingen USB-dataenhet på datorn.
 - UGREEN-appens firmware-ID för modellen är `studio_pro_ota`.
 - UGREENs officiella API publicerar för närvarande `0.2.9` (`HP206_UGREEN_Studio_Pro_V0.2.9.ufw`).
+- Headsetet som testats kör produkt-firmware `0.2.5`; versionen lästes över
+  Bluetooth SPP med ett CRC-verifierat, skrivskyddat `GET_VERSION`-anrop.
 - Paketet identifierar plattformen som `JL708N`; firmwarefamiljen benämns även `JL7083F-B412` i distribuerade paket.
 - Firmwarefilsystemet innehåller separata engelska och kinesiska promptbibliotek. De engelska filerna inkluderar bland annat `power_on.wts`, `power_off.wts`, `bt_conn.wts`, `low_power.wts`, `anc_on.wts` och `anc_off.wts`.
 - `.wts` är JieLis WTGv2/SILK-baserade ljudformat. JieLis officiella Windowsverktyg kan avkoda filerna till WAV via Wine.
 
 Inget verktyg i detta repo skriver till headsetet. OTA-flashning och modifierad ompackning är medvetet inte implementerade ännu.
+
+Läs headsetets installerade produkt-firmware med UGREENs enda tillåtna
+`GET_VERSION`-kommando:
+
+```bash
+./tools/read_ugreen_version.py --query
+```
+
+Läs JieLi-kretsens transport- och OTA-egenskaper separat:
+
+```bash
+./tools/read_device_info.py --query
+```
+
+Versionsfältet från det senare kommandot är JieLi-SDK:ns generiska målversion och
+ska inte förväxlas med UGREENs produkt-firmware. Utan `--query` gör båda
+verktygen en dry-run och skickar ingenting. Resultat från riktiga frågor sparas
+lokalt under `artifacts/captures/` och ignoreras av Git.
 
 ## Kör analysen
 
