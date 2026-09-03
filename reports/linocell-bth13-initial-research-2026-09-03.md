@@ -50,8 +50,8 @@ tillverkat själva elektroniken.
 - Batteritid 6 timmar i snäckorna plus 15 timmar från laddningsetuiet.
 - IPX4, touchknappar och röstassistentstyrning.
 - Fabriksåterställning: ta ut båda snäckorna och tryck snabbt sex gånger på
-  bådas multifunktionsknappar samtidigt. Detta har dokumenterats men inte
-  utförts under undersökningen.
+  bådas multifunktionsknappar samtidigt. Återställningen utfördes senare under
+  undersökningen och återbildade det interna TWS-paret korrekt.
 
 ## Bekräftat via ADB
 
@@ -111,6 +111,37 @@ Jämförelseexempel:
 - [TWS88 med samma manufacturerdata och PnP-alias](https://paul.grozav.info/kb/linux/bluetooth)
 - [YMIOT-BT med samma manufacturerdata](https://forums.raspberrypi.com/viewtopic.php?t=378494)
 
+## HCI-identitet
+
+En kort, kontrollerad HCI-fångst gjordes på datorn medan lurarna anslöts och
+kopplades från utan avsiktlig ljuduppspelning. BlueZ återanvände först cachad
+information, så värden frågade därefter uttryckligen med det skrivskyddade
+standardkommandot `Read Remote Version Information` (`0x041d`). Lurarna svarade:
+
+```text
+Status:              success (0x00)
+LMP version:         0x0c (Bluetooth Core 5.3)
+Manufacturer:        0x05D6 (1494)
+LMP subversion:      0x22BB
+```
+
+Bluetooth SIG:s officiella register tilldelar company ID `0x05D6` till
+**Zhuhai Jieli technology Co.,Ltd**. Det bekräftar att BTH13 använder en
+JieLi-kontroller och styrker att PnP-vendorvärdet `05D6` verkligen avser JieLi.
+
+- [Bluetooth SIG – Assigned Numbers](https://www.bluetooth.com/specifications/assigned-numbers/)
+- [Bluetooth SIG – company ID 0x05D6](https://www.bluetooth.com/wp-content/uploads/Files/Specification/HTML/Assigned_Numbers/out/en/Assigned_Numbers.pdf)
+
+Den tidigare annonseringssträngen och publika jämförelser gör AC897-familjen
+till en rimlig kandidat. HCI-subversion `0x22BB` identifierar däremot inte en
+unik chipmodell, så exempelvis `AC897N` är fortfarande en hypotes och inte ett
+fastställt artikelnummer. JieLis officiella OTA-SDK listar AC897 bland stödda
+familjer och visar att en möjlig framtida uppgraderingsväg är RCSP över BLE
+eller GATT-over-BR/EDR, men endast om produktens firmware faktiskt aktiverat
+den tjänsten.
+
+- [JieLi – iOS JL OTA, stödda familjer och transportkrav](https://github.com/Jieli-Tech/iOS-JL_OTA/blob/master/README_EN.md)
+
 ## USB-prov
 
 Båda snäckorna placerades i laddningsetuiet och etuiet anslöts i normalt läge
@@ -126,23 +157,25 @@ fabriksläge kan inte uteslutas enbart av detta prov.
 
 ## Slutsats
 
-Det finns ännu ingen synlig firmware- eller styrtransport. Standardprofilerna
+Chipplattformen är nu bekräftad som JieLi, men det finns ännu ingen synlig
+firmware- eller styrtransport. Standardprofilerna
 kan bära musik, samtal, mediaknappar och batteri men ger ingen generell metod
 att läsa firmware eller ersätta interna röstprompter. Det är sannolikt att
-prompterna ligger i huvudkretsens interna flash, men chipfamilj och lagring är
-ännu okända.
+prompterna ligger i huvudkretsens interna flash, men exakt SoC, flashlayout och
+firmwareformat är ännu okända.
 
-Profilen får därför inte använda HP206:s JieLi-byggdrivrutin och får inte gå
-vidare från `research` förrän chipset och en verklig firmwareväg har
-identifierats.
+Profilen får därför inte använda HP206:s JieLi-byggdrivrutin oförändrad och får
+inte gå vidare från `research` förrän exakt målvariant och en verklig,
+återställningsbar firmwareväg har identifierats.
 
 ## Nästa säkra undersökningssteg
 
-1. Fotografera all text på laddningsetuiets undersida, kartong och eventuella
-   regulatoriska etiketter; OEM- eller certifieringsnummer kan avslöja chipset.
-2. Om mer radioinformation behövs kan en kort HCI-snoop av en vanlig
-   frånkoppling/återanslutning göras senare. Det kräver att diagnostikloggning
-   slås på uttryckligen eftersom loggen kan innehålla privat Bluetooth-trafik.
-3. Öppna eller löd inte i snäckorna innan modellmärkning och externa
+1. Prova en passiv BLE/RCSP-upptäckt medan lurarna är i normalläge och därefter
+   i det dokumenterade resetläget; försök inte starta OTA eller skriva data.
+2. Jämför JieLis publika AC897/RCSP-signaturer med den annonserade byggsträngen
+   för att snäva in SDK-generationen utan att anta exakt SoC.
+3. Fotografera all text på kartong och eventuella regulatoriska etiketter;
+   OEM- eller certifieringsnummer kan avslöja exakt chipvariant.
+4. Öppna eller löd inte i snäckorna innan modellmärkning och externa
    firmwarekällor är uttömda; de små Li-po-cellerna gör fysisk åtkomst mer
    riskfylld än på ett over-ear-headset.

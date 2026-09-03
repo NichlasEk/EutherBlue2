@@ -5,8 +5,8 @@
   "model": "BTH13 True Wireless Earphones",
   "status": "research",
   "hardware": {
-    "chipFamily": "unknown",
-    "firmwarePlatform": "unknown",
+    "chipFamily": "JieLi; AC897 family candidate, exact SoC unconfirmed",
+    "firmwarePlatform": "JieLi",
     "retailItems": {
       "black": "24366",
       "white": "24367"
@@ -39,6 +39,16 @@
       "channels": 2
     },
     "pnpModalias": "bluetooth:v05D6p000Ad0240",
+    "hciRemoteVersion": {
+      "date": "2026-09-03",
+      "lmpVersion": 12,
+      "bluetoothCoreVersion": "5.3",
+      "manufacturerId": 1494,
+      "manufacturerIdHex": "0x05D6",
+      "manufacturer": "Zhuhai Jieli technology Co.,Ltd",
+      "lmpSubversion": 8891,
+      "lmpSubversionHex": "0x22BB"
+    },
     "advertisingFingerprint": {
       "manufacturerId": 29282,
       "manufacturerIdHex": "0x7262",
