@@ -125,11 +125,12 @@ Kör hela det verifierade Christian-bygget med ett kommando:
 Skriptet kräver både en byte-identisk röstcontainer-roundtrip och en
 byte-identisk hel-UFW-roundtrip, kodar och kontrollavkodar 20 WTS-filer, bygger
 den modifierade UFW:n och låter den oberoende uppackaren läsa tillbaka den
-inbyggda röstcontainern. V3 kodar vid 8 kbit/s och behåller samtliga interna
-originaloffsetar. Resultatet märks uttryckligen `UNTESTED` tills headsetets egen
+inbyggda röstcontainern. Bygget kodar vid 8 kbit/s, behåller samtliga interna
+originaloffsetar och räknar om den krypterade boot-info-CRC:n över hela den
+skrivna banken. Resultatet märks uttryckligen `UNTESTED` tills headsetets egen
 slutverifiering har accepterat det. Se
-[fixed-layout-v3-rapporten](reports/christian-fixed-layout-v3-2026-09-03.md) för
-artefaktsökväg, SHA-256, valideringar och kvarvarande risker.
+[boot-CRC-v4-rapporten](reports/christian-bootcrc-v4-2026-09-03.md) för
+artefaktsökväg, SHA-256 och valideringar.
 
 Kontrollera återställningsgrindarna utan att ansluta eller skriva till
 headsetet:

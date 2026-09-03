@@ -19,6 +19,10 @@ from pathlib import Path
 UFW_HEADER_SIZE = 0x40
 UFW_ENTRY_SIZE = 0x50
 UFW_KEY = 0xFFFF
+BOOT_INFO_OFFSET = 0x1000
+BOOT_INFO_SIZE = 0x20
+BOOT_INFO_DATA_CRC_OFFSET = 0x04
+BOOT_INFO_DATA_LENGTH_OFFSET = 0x08
 
 
 def jl_crc16(data: bytes, initial: int = 0) -> int:
@@ -116,6 +120,57 @@ def replace_flash_entry_crcs(
     image[:UFW_HEADER_SIZE] = crypt_copy(header)
 
 
+def parse_boot_info(flash_data: bytes, image_name: str) -> tuple[bytearray, int, int]:
+    end = BOOT_INFO_OFFSET + BOOT_INFO_SIZE
+    if end > len(flash_data):
+        raise ValueError(f"{image_name}: bootinformationen går utanför bilden")
+    plain = bytearray(crypt_copy(flash_data[BOOT_INFO_OFFSET:end]))
+    stored_header_crc = struct.unpack_from("<H", plain, 0)[0]
+    calculated_header_crc = jl_crc16(plain[2:])
+    if stored_header_crc != calculated_header_crc:
+        raise ValueError(
+            f"{image_name}: fel boot-info-header-CRC: "
+            f"0x{stored_header_crc:04x} != 0x{calculated_header_crc:04x}"
+        )
+    stored_data_crc = struct.unpack_from("<H", plain, BOOT_INFO_DATA_CRC_OFFSET)[0]
+    data_length = struct.unpack_from("<I", plain, BOOT_INFO_DATA_LENGTH_OFFSET)[0]
+    data_start = end
+    data_end = data_start + data_length
+    if data_length == 0 or data_end > len(flash_data):
+        raise ValueError(f"{image_name}: ogiltig datalängd i bootinformationen")
+    calculated_data_crc = jl_crc16(flash_data[data_start:data_end])
+    if stored_data_crc != calculated_data_crc:
+        raise ValueError(
+            f"{image_name}: stockbankens boot-info-data-CRC är redan fel: "
+            f"0x{stored_data_crc:04x} != 0x{calculated_data_crc:04x}"
+        )
+    return plain, stored_data_crc, data_length
+
+
+def update_boot_info_crc(
+    image: bytearray,
+    entry: UfwEntry,
+    original_flash: bytes,
+) -> tuple[int, int, int]:
+    plain, old_data_crc, data_length = parse_boot_info(original_flash, entry.name)
+    data_start = entry.offset + BOOT_INFO_OFFSET + BOOT_INFO_SIZE
+    data_end = data_start + data_length
+    new_data_crc = jl_crc16(image[data_start:data_end])
+    struct.pack_into("<H", plain, BOOT_INFO_DATA_CRC_OFFSET, new_data_crc)
+    struct.pack_into("<H", plain, 0, jl_crc16(plain[2:]))
+    boot_start = entry.offset + BOOT_INFO_OFFSET
+    image[boot_start : boot_start + BOOT_INFO_SIZE] = crypt_copy(plain)
+
+    recovered = crypt_copy(image[boot_start : boot_start + BOOT_INFO_SIZE])
+    if jl_crc16(recovered[2:]) != struct.unpack_from("<H", recovered, 0)[0]:
+        raise ValueError(f"{entry.name}: ny boot-info-header-CRC kunde inte verifieras")
+    if jl_crc16(image[data_start:data_end]) != struct.unpack_from(
+        "<H", recovered, BOOT_INFO_DATA_CRC_OFFSET
+    )[0]:
+        raise ValueError(f"{entry.name}: ny boot-info-data-CRC kunde inte verifieras")
+    return old_data_crc, new_data_crc, data_length
+
+
 def patch_firmware(
     original_ufw: bytes,
     decrypted_flash: bytes,
@@ -166,6 +221,18 @@ def patch_firmware(
     result[
         mirror_absolute_offset : mirror_absolute_offset + len(replacement_tone)
     ] = replacement_ciphertext
+    flash_boot_crc = update_boot_info_crc(
+        result,
+        flash_entry,
+        original_ufw[flash_entry.offset : flash_entry.offset + flash_entry.size],
+    )
+    mirror_boot_crc = update_boot_info_crc(
+        result,
+        mirror_entry,
+        original_ufw[mirror_entry.offset : mirror_entry.offset + mirror_entry.size],
+    )
+    if flash_boot_crc != mirror_boot_crc:
+        raise ValueError("boot-info-metadata skiljer sig mellan dubbelbankerna")
     new_flash_crc = jl_crc16(
         result[flash_entry.offset : flash_entry.offset + flash_entry.size]
     )
@@ -220,6 +287,11 @@ def patch_firmware(
         "mirrorFlashSize": mirror_entry.size,
         "originalMirrorFlashCrc": f"0x{mirror_entry.data_crc:04x}",
         "rebuiltMirrorFlashCrc": f"0x{new_mirror_crc:04x}",
+        "bootInfoOffsetInFlash": BOOT_INFO_OFFSET,
+        "bootInfoDataLength": flash_boot_crc[2],
+        "originalBootInfoDataCrc": f"0x{flash_boot_crc[0]:04x}",
+        "rebuiltBootInfoDataCrc": f"0x{flash_boot_crc[1]:04x}",
+        "bootInfoCrcsValid": True,
         "toneOffsetInFlash": tone_offset,
         "toneAbsoluteOffset": absolute_offset,
         "mirrorToneAbsoluteOffset": mirror_absolute_offset,
