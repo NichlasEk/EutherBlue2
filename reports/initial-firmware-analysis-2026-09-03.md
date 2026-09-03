@@ -66,6 +66,20 @@ Det kinesiska biblioteket innehåller 17 WTS-filer. Totalt avkodades 37 filer fr
 
 Det betyder att egna röster är tekniskt realistiska. Det återstår dock två separata problem: att koda nya WAV-filer med rätt WTS-parametrar och att bygga om samtliga nästlade JLFS/UFW-kontrollsummor utan att förändra reserverade områden.
 
+## Verifierad byggkedja för röstcontainern
+
+JieLis officiella `tone.lua` definierar WTS-kedjan som 32 kHz mono rå-PCM,
+`wtgv2_resample.exe`, och därefter `wtgv2_encode.exe` med 16 kHz målformat och
+20 ms ramar. De pinnade BD19-verktygen verifieras med SHA-256 innan användning.
+Christian-banken kodas tills vidare vid 12 kbit/s för att rymmas i den fasta
+`tone_en`-regionen.
+
+En oförändrad `tone_en` byggdes om från sina 21 JLFS-poster. Resultatet var
+byte-identiskt med originalcontainern; båda hade SHA-256
+`82dcc330e0d77b5de8ad5d690c3e3fe41b783b2db3ed267e7349999dcf8e5d10`.
+Det verifierar postordning, offsets, 16-byte-justering, data-CRC och header-CRC
+för röstcontainern. Hela UFW-containerns roundtrip återstår fortfarande.
+
 ## Vad som inte har gjorts
 
 - Headsetet har inte satts i OTA- eller DFU-läge.

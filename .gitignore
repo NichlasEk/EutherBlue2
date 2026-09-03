@@ -3,6 +3,7 @@ artifacts/original/
 artifacts/extracted/
 artifacts/captures/
 artifacts/previews/
+artifacts/build/
 .cache/
 __pycache__/
 *.pyc

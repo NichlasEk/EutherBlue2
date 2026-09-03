@@ -79,6 +79,25 @@ Rendera den valda, irriterade Christian Grosshandlare-röstbanken med samtliga
 Repliker och reproducerbara seeds finns i
 `voice-banks/christian-grosshandlare-irriterad.json`.
 
+Koda den renderade banken till JieLi WTS vid 12 kbit/s och avkoda varje fil som
+roundtrip-kontroll:
+
+```bash
+./tools/encode_voice_bank_wts.sh
+```
+
+Verifiera att JLFS-röstcontainern kan byggas om byte-identiskt:
+
+```bash
+./tools/repack_tone_library.py \
+  artifacts/extracted/studio-pro-v0.2.9/files/tone_en \
+  artifacts/build/roundtrip/tone_en \
+  --require-identical
+```
+
+Verktyget kan därefter få en katalog med WTS-ersättningar via
+`--replacements`. Utdata ligger under `artifacts/build/` och ignoreras av Git.
+
 ## Säkerhetsgräns
 
 Den hämtade V0.2.9-filen är en officiell referensbild, **inte en verifierad backup av den version som sitter i just vårt headset**. Innan en framtida modifiering får flashas måste vi:
