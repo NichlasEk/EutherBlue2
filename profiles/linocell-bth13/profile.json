@@ -16,7 +16,16 @@
       "retailItem": "24367",
       "labelCode": "IK144383"
     },
-    "testedDevices": 1
+    "openedVariant": {
+      "color": "black",
+      "retailItem": "24366",
+      "pcbMarkingCandidate": "T29-7A01-V1.5",
+      "pcbMarkingAlternative": "T29-7C01-V1.5",
+      "pcbDateCodeCandidate": "20230916",
+      "socVisibleInPhotos": false,
+      "report": "reports/linocell-bth13-hardware-research-2026-09-03.md"
+    },
+    "testedDevices": 2
   },
   "transport": {
     "control": "avrcp-and-hfp-only-observed",
@@ -95,7 +104,17 @@
     ]
   },
   "firmware": {
-    "format": "unknown",
+    "format": "JieLi new-firmware/JLFS candidate; requires stock dump",
+    "readoutCandidate": {
+      "method": "JieLi MaskROM UBOOT1.00 over direct SoC USB D+/D-",
+      "tool": "kagaimiq/jl-uboot-tool",
+      "family": "BR30 candidate",
+      "usbIdentityExpected": "BR30 UBOOT1.00",
+      "usbVidExpected": "0x4C4A",
+      "usbPidExpected": "0x3042",
+      "physicalUnitVerified": false,
+      "safetyPolicy": "identify-soc-and-pads-then-two-identical-read-only-dumps-before-any-write"
+    },
     "stock": {
       "version": "unknown",
       "filename": "stock.bin",
@@ -111,8 +130,8 @@
     }
   },
   "voice": {
-    "container": "unknown",
-    "format": "unknown",
+    "container": "JieLi tone directory candidate",
+    "format": "WTG and/or MP3 candidate; requires stock dump",
     "originalPath": "artifacts/extracted/linocell-bth13/voice.bin",
     "promptCount": null,
     "preserveLayout": false,
