@@ -87,10 +87,11 @@ def parse_ufw(image: bytes) -> tuple[bytearray, int, list[UfwEntry]]:
         if entry.offset + entry.size > len(image):
             raise ValueError(f"UFW-posten {name} går utanför filen")
         actual_crc = jl_crc16(image[entry.offset : entry.offset + entry.size])
-        # JieLi's own UFW loader requires this check for the flash image. Other
-        # vendor-specific entry types reuse the 16-bit field with differing
-        # semantics, so preserve those entries byte-for-byte without guessing.
-        if entry.name == "flash.bin" and actual_crc != entry.data_crc:
+        # JieLi's own UFW loader requires this check for both double-bank flash
+        # images. Other vendor-specific entry types reuse the 16-bit field with
+        # differing semantics, so preserve those entries byte-for-byte without
+        # guessing.
+        if entry.name in {"flash.bin", "flash2.bin"} and actual_crc != entry.data_crc:
             raise ValueError(
                 f"fel data-CRC för {name}: 0x{entry.data_crc:04x} != 0x{actual_crc:04x}"
             )
@@ -98,12 +99,18 @@ def parse_ufw(image: bytes) -> tuple[bytearray, int, list[UfwEntry]]:
     return header, list_end, entries
 
 
-def replace_flash_entry_crc(
-    image: bytearray, header: bytearray, list_end: int, entry: UfwEntry, crc: int
+def replace_flash_entry_crcs(
+    image: bytearray,
+    header: bytearray,
+    list_end: int,
+    updates: list[tuple[UfwEntry, int]],
 ) -> None:
-    plain_entry = bytearray(entry.plain_header)
-    struct.pack_into("<H", plain_entry, 4, crc)
-    image[entry.header_offset : entry.header_offset + UFW_ENTRY_SIZE] = crypt_copy(plain_entry)
+    for entry, crc in updates:
+        plain_entry = bytearray(entry.plain_header)
+        struct.pack_into("<H", plain_entry, 4, crc)
+        image[entry.header_offset : entry.header_offset + UFW_ENTRY_SIZE] = crypt_copy(
+            plain_entry
+        )
     struct.pack_into("<H", header, 2, jl_crc16(image[UFW_HEADER_SIZE:list_end]))
     struct.pack_into("<H", header, 0, jl_crc16(header[2:]))
     image[:UFW_HEADER_SIZE] = crypt_copy(header)
@@ -122,6 +129,10 @@ def patch_firmware(
     if len(flash_entries) != 1:
         raise ValueError("förväntade exakt en flash.bin-post")
     flash_entry = flash_entries[0]
+    mirror_entries = [entry for entry in entries if entry.name == "flash2.bin"]
+    if len(mirror_entries) != 1:
+        raise ValueError("förväntade exakt en flash2.bin-post för dubbelbanksbilden")
+    mirror_entry = mirror_entries[0]
     if len(decrypted_flash) != flash_entry.size:
         raise ValueError("decrypted.bin matchar inte flash.bin-storleken")
 
@@ -132,6 +143,14 @@ def patch_firmware(
     original_ciphertext = original_ufw[absolute_offset : absolute_offset + len(original_tone)]
     if len(original_ciphertext) != len(original_tone):
         raise ValueError("röstregionen går utanför flash.bin")
+    mirror_absolute_offset = mirror_entry.offset + tone_offset
+    mirror_ciphertext = original_ufw[
+        mirror_absolute_offset : mirror_absolute_offset + len(original_tone)
+    ]
+    if mirror_ciphertext != original_ciphertext:
+        raise ValueError(
+            "röstregionen är inte identisk i flash.bin och flash2.bin; vägrar gissa"
+        )
 
     # JieLi SFC encryption is XOR based. Derive the exact keystream from the
     # matching original ciphertext/plaintext pair instead of approximating the
@@ -144,10 +163,21 @@ def patch_firmware(
     )
     result = bytearray(original_ufw)
     result[absolute_offset : absolute_offset + len(replacement_tone)] = replacement_ciphertext
+    result[
+        mirror_absolute_offset : mirror_absolute_offset + len(replacement_tone)
+    ] = replacement_ciphertext
     new_flash_crc = jl_crc16(
         result[flash_entry.offset : flash_entry.offset + flash_entry.size]
     )
-    replace_flash_entry_crc(result, header, list_end, flash_entry, new_flash_crc)
+    new_mirror_crc = jl_crc16(
+        result[mirror_entry.offset : mirror_entry.offset + mirror_entry.size]
+    )
+    replace_flash_entry_crcs(
+        result,
+        header,
+        list_end,
+        [(flash_entry, new_flash_crc), (mirror_entry, new_mirror_crc)],
+    )
     rebuilt = bytes(result)
 
     # Reparse every UFW entry and independently recover the patched plaintext.
@@ -163,6 +193,19 @@ def patch_firmware(
     )
     if recovered != replacement_tone:
         raise ValueError("den inbyggda röstcontainern kunde inte verifieras efter kryptering")
+    recovered_mirror = bytes(
+        new_cipher ^ old_plain ^ old_cipher
+        for new_cipher, old_plain, old_cipher in zip(
+            rebuilt[
+                mirror_absolute_offset : mirror_absolute_offset + len(original_tone)
+            ],
+            original_tone,
+            mirror_ciphertext,
+            strict=True,
+        )
+    )
+    if recovered_mirror != replacement_tone:
+        raise ValueError("röstcontainern kunde inte verifieras i flash2.bin")
 
     return rebuilt, {
         "originalUfwSha256": sha256(original_ufw),
@@ -173,8 +216,14 @@ def patch_firmware(
         "flashSize": flash_entry.size,
         "originalFlashCrc": f"0x{flash_entry.data_crc:04x}",
         "rebuiltFlashCrc": f"0x{new_flash_crc:04x}",
+        "mirrorFlashOffset": mirror_entry.offset,
+        "mirrorFlashSize": mirror_entry.size,
+        "originalMirrorFlashCrc": f"0x{mirror_entry.data_crc:04x}",
+        "rebuiltMirrorFlashCrc": f"0x{new_mirror_crc:04x}",
         "toneOffsetInFlash": tone_offset,
         "toneAbsoluteOffset": absolute_offset,
+        "mirrorToneAbsoluteOffset": mirror_absolute_offset,
+        "toneRegionMirrored": True,
         "toneSize": len(replacement_tone),
         "originalToneSha256": sha256(original_tone),
         "replacementToneSha256": sha256(replacement_tone),

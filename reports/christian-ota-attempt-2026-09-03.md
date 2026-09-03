@@ -27,5 +27,21 @@ Nästa firmwareförsök måste först förklara och reparera den integritetskont
 som stock-filen klarar men den modifierade filen missar. Samma avvisade fil ska
 inte flashas igen.
 
+## Efteranalys
+
+UFW-filen innehåller två nästan identiska programbilder: `flash.bin` och
+`flash2.bin`. Stockfilens 56 928 byte långa röstregion är byte-identisk i båda
+bilderna på samma relativa offset. Det avvisade v1-bygget ändrade enbart
+`flash.bin`; `flash2.bin` behöll originalrösterna. Därmed innehöll det levererade
+dubbelbankspaketet två olika versioner av samma region.
+
+Byggaren har därför ändrats fail-closed: den kräver en identisk stockregion i
+båda bilderna, patchar båda atomiskt och räknar om respektive data-CRC samt
+postlistans och huvudheaderns CRC. Det nya v2-paketet har SHA-256
+`dc7c1d529cba32cf2def78e30a058978b7771277184d9ee59b3176aa85e1ede5`.
+
+`tail.bin` ändras inte. Dess kodade värde har verifierats vara chipnyckeln
+`0x8887`, inte en innehållssignatur över UFW-filen.
+
 Råloggen läggs inte i Git eftersom målinformationen innehåller en
 enhetsspecifik auth-nyckel.

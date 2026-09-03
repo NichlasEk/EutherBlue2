@@ -6,22 +6,22 @@ Mål: UGREEN Studio Pro / HP206
 
 Bas: officiell UGREEN V0.2.9
 
-Status: **byggd och statiskt verifierad, aldrig flashad på hårdvara**
+Status: **dubbelbanksbygge v2 statiskt verifierat, ännu inte sänt till hårdvara**
 
 ## Artefakt
 
 Lokal fil:
 
-`artifacts/build/christian-grosshandlare-irriterad/HP206_UGREEN_Studio_Pro_V0.2.9_Christian-UNTESTED-NOT-FOR-FLASH.ufw`
+`artifacts/build/christian-grosshandlare-irriterad/HP206_UGREEN_Studio_Pro_V0.2.9_Christian-DUALBANK-v2-UNTESTED.ufw`
 
 | Egenskap | Värde |
 |---|---|
 | Storlek | 2 181 056 byte |
-| SHA-256 | `871bb1506489c36beb8d6143ed3c0528f9674c7ed660ddaf6c5356ff52d08d3f` |
+| SHA-256 | `dc7c1d529cba32cf2def78e30a058978b7771277184d9ee59b3176aa85e1ede5` |
 | Basfirmware SHA-256 | `41faae11340001e1d7a5013758296b839e4bbe5c3e86dc859ba9d5aa2fc9a1b6` |
 | Produktversion i basen | V0.2.9 |
 | Installerad produktversion före test | V0.2.5 |
-| Modifierad region | `tone_en`, 56 928 byte |
+| Modifierade regioner | `tone_en` i både `flash.bin` och `flash2.bin`, 56 928 byte vardera |
 | Modifierad `tone_en` SHA-256 | `c295e0732be60a6ac74062f4bf9aab4ff2f6568879fa57d5d5387f174496052a` |
 | WTS-filer | 20 vid 12 kbit/s |
 | Ledigt i röstregionen | 12 448 byte |
@@ -42,12 +42,15 @@ Firmwarefilen och övriga byggartefakter ignoreras av Git. De reproduceras med:
    `82dcc330e0d77b5de8ad5d690c3e3fe41b783b2db3ed267e7349999dcf8e5d10`.
 4. En oförändrad hel-UFW-roundtrip blev byte-identisk med UGREEN-originalet:
    `41faae11340001e1d7a5013758296b839e4bbe5c3e86dc859ba9d5aa2fc9a1b6`.
-5. Den modifierade UFW:ns huvudheader, krypterade postlista och
-   `flash.bin`-CRC validerades efter bygget.
+5. Den modifierade UFW:ns huvudheader, krypterade postlista samt CRC för både
+   `flash.bin` och `flash2.bin` validerades efter bygget.
 6. Den oberoende uppackaren läste tillbaka `tone_en`; dess SHA-256 var exakt
    samma som den byggda ersättningscontainern.
 7. En diffgränskontroll bekräftade att ändrade byte endast finns i
-   UFW-kontrollhuvudena och den fasta `tone_en`-regionen.
+   UFW-kontrollhuvudena och de två fasta, speglade `tone_en`-regionerna.
+8. Båda krypterade röstregionerna är byte-identiska efter patchningen och kan
+   oberoende återvinnas till ersättningscontainern med SHA-256
+   `c295e0732be60a6ac74062f4bf9aab4ff2f6568879fa57d5d5387f174496052a`.
 
 JieLi-uppackaren når fortfarande den redan dokumenterade begränsningen vid den
 senare `ALIGN_DIR`-posten. Den inträffar även på originalbilden och först efter
@@ -67,19 +70,17 @@ exempel:
 Den fullständiga, reproducerbara replikkartan och alla seeds finns i
 `voice-banks/christian-grosshandlare-irriterad.json`.
 
-## Varför filen fortfarande heter UNTESTED-NOT-FOR-FLASH
+## Varför filen fortfarande heter UNTESTED
 
 Statiska format- och CRC-kontroller kan inte bevisa att bootloadern accepterar
-ett modifierat paket eller att headsetet kan återställas efter strömavbrott,
-protokollfel eller inkompatibel V0.2.9-uppgradering. Headsetet kör V0.2.5, så en
-flash skulle både uppgradera programvaran och byta röstbank i samma operation.
+ett modifierat paket. Officiell V0.2.9 har däremot installerats och startat
+framgångsrikt på enheten, och klienten har kvar samma hashverifierade stock-fil
+för återställning.
 
-Innan flashning krävs minst:
+Kvarstående risk före fysisk v2-test:
 
-1. verifierad metod att återinstallera en officiell, känd firmware;
-2. klarlagt om original V0.2.5 kan hämtas eller återställas;
-3. fulladdat batteri och stabil Bluetooth-länk;
-4. dokumenterad OTA-sekvens med fel- och återanslutningshantering;
-5. ett uttryckligt beslut att acceptera brickningsrisken.
+1. hård rollback efter en eventuell bootloop är ännu inte bevisad;
+2. original V0.2.5 har inte återfunnits;
+3. v2-paketet är ännu inte accepterat av headsetets slutverifiering.
 
 Inget byggverktyg i repot innehåller Bluetooth- eller OTA-skrivfunktioner.

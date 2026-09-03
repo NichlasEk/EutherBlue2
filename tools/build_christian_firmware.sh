@@ -5,7 +5,7 @@ ORIGINAL_UFW="${1:-artifacts/original/firmware/HP206_UGREEN_Studio_Pro_V0.2.9.uf
 EXTRACTED="${2:-artifacts/extracted/studio-pro-v0.2.9}"
 PREVIEWS="${3:-artifacts/previews/christian-grosshandlare-irriterad/full-bank}"
 OUTPUT="${4:-artifacts/build/christian-grosshandlare-irriterad}"
-FIRMWARE="$OUTPUT/HP206_UGREEN_Studio_Pro_V0.2.9_Christian-UNTESTED-NOT-FOR-FLASH.ufw"
+FIRMWARE="$OUTPUT/HP206_UGREEN_Studio_Pro_V0.2.9_Christian-DUALBANK-v2-UNTESTED.ufw"
 
 for required in \
     "$ORIGINAL_UFW" \
