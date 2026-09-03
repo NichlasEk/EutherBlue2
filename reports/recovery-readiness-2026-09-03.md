@@ -93,9 +93,13 @@ stock-testet; vår striktare, modellspecifika klient återstår att bygga.
 | Enhetsidentitet matchar vår capture | PASS |
 | Enheten rapporterar dubbelbank | PASS |
 | Enheten rapporterar att separat bootloader-handoff inte behövs | PASS |
+| Officiell JieLi-klient ansluter och läser målinfo över SPP | PASS |
 | Exakt återställningsbild av installerad V0.2.5 sparad | STOP |
 | Stock V0.2.9-restoration testad på detta headset | STOP |
 | Automatisk hård rollback testad på detta headset | STOP |
+
+Android/SPP-resultatet och den kvarvarande auth-timeouten finns i
+[Android-preflightrapporten](android-spp-preflight-2026-09-03.md).
 
 ## Källor
 

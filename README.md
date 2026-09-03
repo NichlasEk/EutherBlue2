@@ -149,6 +149,11 @@ pinnade klient och vår verifierade stock-fil:
 Resultatet hamnar i ignorerade `artifacts/recovery-kit/`. Skriptet installerar
 ingenting, använder inte ADB eller Bluetooth och kan inte starta OTA.
 
+Den officiella klientens första hårdvarupreflight finns dokumenterad i
+[Android/SPP-rapporten](reports/android-spp-preflight-2026-09-03.md). SPP och
+`GetTargetInfo` fungerar, men en timeout i den generiska certifieringshandshaken
+måste lösas innan ett stock-test får starta.
+
 ## Säkerhetsgräns
 
 Den hämtade V0.2.9-filen är en officiell referensbild, **inte en verifierad backup av den version som sitter i just vårt headset**. Innan en framtida modifiering får flashas måste vi:
