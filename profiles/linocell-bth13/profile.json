@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "id": "linocell-bth13",
+  "manufacturer": "Linocell",
+  "model": "BTH13 True Wireless Earphones",
+  "status": "research",
+  "hardware": {
+    "chipFamily": "unknown",
+    "firmwarePlatform": "unknown",
+    "retailItems": {
+      "black": "24366",
+      "white": "24367"
+    },
+    "testedDevices": 1
+  },
+  "transport": {
+    "control": "avrcp-and-hfp-only-observed",
+    "ota": "not-observed",
+    "usbData": false,
+    "otaClient": "none-known",
+    "bluetoothVersion": "5.3",
+    "radio": "br-edr",
+    "audio": {
+      "profile": "a2dp",
+      "codec": "sbc",
+      "sampleRateHz": 44100,
+      "bitsPerSample": 16,
+      "channels": 2
+    },
+    "serviceUuids": [
+      "0000110b-0000-1000-8000-00805f9b34fb",
+      "0000110e-0000-1000-8000-00805f9b34fb",
+      "0000111e-0000-1000-8000-00805f9b34fb"
+    ]
+  },
+  "firmware": {
+    "format": "unknown",
+    "stock": {
+      "version": "unknown",
+      "filename": "stock.bin",
+      "path": "artifacts/original/linocell-bth13/stock.bin",
+      "size": null,
+      "sha256": null
+    },
+    "extractedPath": "artifacts/extracted/linocell-bth13",
+    "decryptedFlashPath": "artifacts/extracted/linocell-bth13/decrypted.bin",
+    "banks": {
+      "entries": [],
+      "bootInfo": null
+    }
+  },
+  "voice": {
+    "container": "unknown",
+    "format": "unknown",
+    "originalPath": "artifacts/extracted/linocell-bth13/voice.bin",
+    "promptCount": null,
+    "preserveLayout": false,
+    "bitrate": null,
+    "tempoMap": "voice-banks/linocell-bth13.tempo",
+    "previewPath": "artifacts/previews/linocell-bth13"
+  },
+  "build": {
+    "driver": "unknown",
+    "voiceBank": "unassigned",
+    "outputDirectory": "artifacts/build/linocell-bth13",
+    "outputFilename": "linocell-bth13-custom.bin",
+    "verifiedSha256": null
+  },
+  "recovery": {
+    "stockOtaTested": false,
+    "modifiedOtaTested": false,
+    "automaticHardRollbackTested": false,
+    "report": "reports/linocell-bth13-initial-research-2026-09-03.md"
+  }
+}

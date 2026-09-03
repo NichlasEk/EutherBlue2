@@ -21,38 +21,32 @@
       "version": "unknown",
       "filename": "stock.bin",
       "path": "artifacts/original/replace-model-id/stock.bin",
-      "size": 0,
-      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+      "size": null,
+      "sha256": null
     },
     "extractedPath": "artifacts/extracted/replace-model-id",
     "decryptedFlashPath": "artifacts/extracted/replace-model-id/decrypted.bin",
     "banks": {
-      "entries": ["flash.bin", "flash2.bin"],
-      "bootInfo": {
-        "offset": 4096,
-        "size": 32,
-        "dataCrcOffset": 4,
-        "dataLengthOffset": 8,
-        "cipherKey": 65535
-      }
+      "entries": [],
+      "bootInfo": null
     }
   },
   "voice": {
     "container": "tone_en",
     "format": "unknown",
     "originalPath": "artifacts/extracted/replace-model-id/files/tone_en",
-    "promptCount": 0,
-    "preserveLayout": true,
-    "bitrate": 8000,
+    "promptCount": null,
+    "preserveLayout": false,
+    "bitrate": null,
     "tempoMap": "voice-banks/replace-model-id.tempo",
     "previewPath": "artifacts/previews/replace-model-id"
   },
   "build": {
-    "driver": "jieli-ufw-boot-crc-v1",
+    "driver": "unknown",
     "voiceBank": "replace-voice-bank",
     "outputDirectory": "artifacts/build/replace-model-id",
     "outputFilename": "replace-model-id-custom.ufw",
-    "verifiedSha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    "verifiedSha256": null
   },
   "recovery": {
     "stockOtaTested": false,

@@ -95,17 +95,27 @@ def validate(
     if profile["status"] not in {"research", "buildable", "working"}:
         errors.append("status måste vara research, buildable eller working")
     try:
+        status = profile["status"]
         driver = nested(profile, "build.driver")
-        if driver not in KNOWN_DRIVERS:
+        if driver == "unknown" and status != "research":
+            errors.append("endast research-profiler får ha okänd byggdrivrutin")
+        elif driver != "unknown" and driver not in KNOWN_DRIVERS:
             errors.append(f"okänd byggdrivrutin: {driver}")
         stock_sha = nested(profile, "firmware.stock.sha256")
-        if not isinstance(stock_sha, str) or not SHA256.fullmatch(stock_sha):
+        if status != "research" and (
+            not isinstance(stock_sha, str) or not SHA256.fullmatch(stock_sha)
+        ):
             errors.append("firmware.stock.sha256 är inte en SHA-256")
         verified_sha = nested(profile, "build.verifiedSha256")
-        if not isinstance(verified_sha, str) or not SHA256.fullmatch(verified_sha):
+        if status == "working" and (
+            not isinstance(verified_sha, str) or not SHA256.fullmatch(verified_sha)
+        ):
             errors.append("build.verifiedSha256 är inte en SHA-256")
         bank_entries = nested(profile, "firmware.banks.entries")
-        if bank_entries != ["flash.bin", "flash2.bin"]:
+        if driver == "jieli-ufw-boot-crc-v1" and bank_entries != [
+            "flash.bin",
+            "flash2.bin",
+        ]:
             errors.append("JieLi-drivrutinen kräver flash.bin och flash2.bin")
         for key in (
             "firmware.stock.path",
@@ -134,7 +144,9 @@ def validate(
                 inspect_keys(child)
 
     inspect_keys(profile)
-    if check_artifacts and not errors:
+    if check_artifacts and profile.get("status") == "research":
+        errors.append("research-profilen har ännu inga verifierbara firmwareartefakter")
+    elif check_artifacts and not errors:
         stock_path = safe_repo_path(nested(profile, "firmware.stock.path"), "stock.path")
         if not stock_path.is_file():
             errors.append(f"stockfilen saknas: {stock_path.relative_to(REPO_ROOT)}")
