@@ -1,0 +1,28 @@
+{
+  "id": "christian-grosshandlare-irriterad-bth13",
+  "displayName": "Christian Grosshandlare - irriterad - BR30-referens",
+  "language": "sv",
+  "modelBackend": "voxcpm2",
+  "reference": "~/EutherVox/models/moss-reference/stormakt3020/christian-grosshandlare-calm-b.wav",
+  "referenceText": "Välkommen till mitt kontor. Christian Grosshandlare är namnet. Jag köper god vara, säljer till rätt pris och håller ordning på varje tunna och krona. Ge mig fakta i lugn ton, så skall du få ett klart besked och en affär som håller.",
+  "cfgValue": 2.0,
+  "inferenceTimesteps": 20,
+  "prompts": {
+    "0": {"text": "Noll kronor!", "seed": 213000},
+    "1": {"text": "En krona!", "seed": 213001},
+    "2": {"text": "Två kronor!", "seed": 213002},
+    "3": {"text": "Tre kronor!", "seed": 213003},
+    "4": {"text": "Fyra kronor!", "seed": 213004},
+    "5": {"text": "Fem kronor!", "seed": 213005},
+    "6": {"text": "Sex kronor!", "seed": 213006},
+    "7": {"text": "Sju kronor!", "seed": 213007},
+    "8": {"text": "Åtta kronor!", "seed": 213008},
+    "9": {"text": "Nio kronor!", "seed": 213009},
+    "bt": {"text": "Bluetoothbörsen är öppen!", "seed": 213010},
+    "bt_conn": {"text": "Den är ansluten, för fan, mannen!", "seed": 206025},
+    "bt_dconn": {"text": "Vem kapade handelsleden nu då?", "seed": 206005},
+    "power_off": {"text": "Stäng lagret. Jag är färdig.", "seed": 206002},
+    "power_on": {"text": "Öppna butiken, mannen!", "seed": 206001},
+    "ring": {"text": "Telefon! Svara då, för fan!", "seed": 206006}
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "repository": "https://github.com/GZHXXY/AC897N_AD697N_earphone_release_V2.3.2",
+    "commit": "a55d953c15e4b9133d8b6b1bc95fabddb2922003",
+    "path": "cpu/br30/tools/earphone/standard/update.ufw",
+    "sha256": "2ea569fdd8b0dc0dcb5ec0ca6a9d96ab291752a5e41920f6dd5dd7037a4e3c8b"
+  },
+  "warning": "Reference layout only. It is not proven to be the Linocell BTH13 stock layout.",
+  "containerSize": 22544,
+  "indexedPayloadSize": 21683,
+  "prompts": {
+    "0": 1243,
+    "1": 992,
+    "2": 957,
+    "3": 979,
+    "4": 1148,
+    "5": 865,
+    "6": 1495,
+    "7": 1320,
+    "8": 881,
+    "9": 930,
+    "bt": 2035,
+    "bt_conn": 1253,
+    "bt_dconn": 1653,
+    "power_off": 1577,
+    "power_on": 1278,
+    "ring": 3077
+  }
+}
