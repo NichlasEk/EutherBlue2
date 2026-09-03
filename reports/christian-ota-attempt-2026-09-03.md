@@ -87,3 +87,23 @@ telefonen med SHA-256
 Efter avvisningen förblev Studio Pro ansluten och aktiv för både A2DP och HFP.
 Att v1, v2 och v3 ger identiskt slutresultat trots olika intern layout visar att
 JLFS-posternas flytt eller slotstorlek inte är den återstående orsaken.
+
+## Fysiskt boot-CRC-v4-försök — lyckat
+
+Efter v3 identifierades boot-info-postens separata CRC16 över de 971 703 byte
+som faktiskt skrivs till banken. V4 uppdaterade denna CRC från `0xe042` till
+`0xd86e` och räknade om boot-info-headern i båda bankerna.
+
+| Kontroll | Resultat |
+|---|---|
+| Fil | `HP206_UGREEN_Studio_Pro_V0.2.9_Christian-BOOTCRC-v4-UNTESTED.ufw` |
+| SHA-256 | `4e0a8559c2e60f3625821c81d0f2b078043ef79297bff5009f365b4e50968faa` |
+| Sluttid | 12:29:03 lokal tid |
+| `upgradeStep05` | `Result : 0 (0x0)` |
+| Omstartskommando | skickat och besvarat |
+| Klientresultat | `Upgrade is complete` |
+| Efter omstart | HFP och A2DP återanslutna; Studio Pro aktiv |
+| Hörbar verifiering | användaren bekräftade att de modifierade rösterna fungerar |
+
+Detta bekräftar att `0x4005` orsakades av den inaktuella krypterade
+boot-info-data-CRC:n, inte av de nya WTS-filerna eller deras interna JLFS-layout.

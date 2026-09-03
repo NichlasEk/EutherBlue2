@@ -127,8 +127,8 @@ byte-identisk hel-UFW-roundtrip, kodar och kontrollavkodar 20 WTS-filer, bygger
 den modifierade UFW:n och låter den oberoende uppackaren läsa tillbaka den
 inbyggda röstcontainern. Bygget kodar vid 8 kbit/s, behåller samtliga interna
 originaloffsetar och räknar om den krypterade boot-info-CRC:n över hela den
-skrivna banken. Resultatet märks uttryckligen `UNTESTED` tills headsetets egen
-slutverifiering har accepterat det. Se
+skrivna banken. Boot-CRC-v4 har accepterats av headsetets slutverifiering,
+startat om fysiskt och fått sin modifierade röstbank hörbart bekräftad. Se
 [boot-CRC-v4-rapporten](reports/christian-bootcrc-v4-2026-09-03.md) för
 artefaktsökväg, SHA-256 och valideringar.
 

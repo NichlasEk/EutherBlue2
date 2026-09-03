@@ -4,7 +4,7 @@ Datum: 2026-09-03
 
 Mål: UGREEN Studio Pro / HP206
 
-Status: **statiskt verifierad, ännu inte skickad till headsetet**
+Status: **installerad, omstartad och hörbart verifierad på HP206**
 
 ## Genombrottet efter v3
 
@@ -27,7 +27,13 @@ skiljer sig.
 
 ## Artefakt
 
+Installerad fil:
+
 `artifacts/build/christian-grosshandlare-irriterad/HP206_UGREEN_Studio_Pro_V0.2.9_Christian-BOOTCRC-v4-UNTESTED.ufw`
+
+Reproducerbara framtida byggen får namnet:
+
+`artifacts/build/christian-grosshandlare-irriterad/HP206_UGREEN_Studio_Pro_V0.2.9_Christian-BOOTCRC-v4-WORKING.ufw`
 
 | Egenskap | Värde |
 |---|---|
@@ -50,5 +56,19 @@ skiljer sig.
    passerar.
 6. En oförändrad hel-UFW-roundtrip förblir byte-identisk med originalet.
 
-Namnet `UNTESTED` behålls tills enheten har accepterat Step05 och genomfört en
-fysisk omstart.
+## Fysisk verifiering
+
+| Kontroll | Resultat |
+|---|---|
+| OTA-filens SHA-256 på telefonen | matchade byggartefakten |
+| Överföring | 100 procent utan transportfel |
+| `upgradeStep05` | `Result : 0 (0x0)` |
+| Omstartskommando | skickat och besvarat |
+| Klientresultat | `Upgrade is complete` |
+| HFP efter omstart | ansluten |
+| A2DP efter omstart | ansluten och aktiv |
+| Hörbar röstbank | användaren bekräftade “det funkar!” |
+
+Det installerade innehållet och `WORKING`-bygget är byteidentiska och har samma
+SHA-256. Det äldre filnamnet `UNTESTED` beskriver enbart namnet vid själva
+försöket, inte längre artefaktens status.

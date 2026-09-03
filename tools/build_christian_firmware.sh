@@ -5,7 +5,7 @@ ORIGINAL_UFW="${1:-artifacts/original/firmware/HP206_UGREEN_Studio_Pro_V0.2.9.uf
 EXTRACTED="${2:-artifacts/extracted/studio-pro-v0.2.9}"
 PREVIEWS="${3:-artifacts/previews/christian-grosshandlare-irriterad/full-bank}"
 OUTPUT="${4:-artifacts/build/christian-grosshandlare-irriterad}"
-FIRMWARE="$OUTPUT/HP206_UGREEN_Studio_Pro_V0.2.9_Christian-BOOTCRC-v4-UNTESTED.ufw"
+FIRMWARE="$OUTPUT/HP206_UGREEN_Studio_Pro_V0.2.9_Christian-BOOTCRC-v4-WORKING.ufw"
 BITRATE="${EUTHERBLUE_WTS_BITRATE:-8000}"
 TEMPO_MAP="${EUTHERBLUE_WTS_TEMPO_MAP:-voice-banks/christian-grosshandlare-irriterad-fixed-layout.tempo}"
 
