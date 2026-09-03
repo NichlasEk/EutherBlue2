@@ -128,6 +128,17 @@ inbyggda röstcontainern. Resultatet märks uttryckligen
 Se [byggrapporten](reports/christian-firmware-build-2026-09-03.md) för exakt
 artefaktsökväg, SHA-256, valideringar och kvarvarande risker.
 
+Kontrollera återställningsgrindarna utan att ansluta eller skriva till
+headsetet:
+
+```bash
+./tools/check_recovery_readiness.py
+```
+
+Kontrollen ska för närvarande svara `NOT READY`: dubbelbanksstödet är avläst,
+men en stock-restoration och hård rollback är ännu inte fysiskt verifierade.
+Se [återställningsrapporten](reports/recovery-readiness-2026-09-03.md).
+
 ## Säkerhetsgräns
 
 Den hämtade V0.2.9-filen är en officiell referensbild, **inte en verifierad backup av den version som sitter i just vårt headset**. Innan en framtida modifiering får flashas måste vi:
