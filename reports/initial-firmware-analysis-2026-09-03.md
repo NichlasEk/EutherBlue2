@@ -80,6 +80,13 @@ byte-identiskt med originalcontainern; båda hade SHA-256
 Det verifierar postordning, offsets, 16-byte-justering, data-CRC och header-CRC
 för röstcontainern. Hela UFW-containerns roundtrip återstår fortfarande.
 
+Den irriterade Christian Grosshandlare-banken kodades därefter till 20 WTS-filer
+vid 12 kbit/s. Samtliga kunde avkodas tillbaka till 16 kHz stereo PCM16.
+WTS-filerna upptar tillsammans 43 164 byte. Den ombyggda `tone_en` är fortsatt
+exakt 56 928 byte, använder 44 480 byte inklusive JLFS-headerdata och lämnar
+12 448 byte marginal. SHA-256 för den modifierade röstcontainern är
+`c295e0732be60a6ac74062f4bf9aab4ff2f6568879fa57d5d5387f174496052a`.
+
 ## Vad som inte har gjorts
 
 - Headsetet har inte satts i OTA- eller DFU-läge.
