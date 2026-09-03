@@ -69,6 +69,16 @@ skapar både käll-WAV och headsetanpassad 16 kHz stereo-WAV under
 `artifacts/previews/`. Det packar inte firmware och ansluter aldrig till
 headsetet.
 
+Rendera den valda, irriterade Christian Grosshandlare-röstbanken med samtliga
+20 prompter:
+
+```bash
+./tools/generate_voice_bank.py
+```
+
+Repliker och reproducerbara seeds finns i
+`voice-banks/christian-grosshandlare-irriterad.json`.
+
 ## Säkerhetsgräns
 
 Den hämtade V0.2.9-filen är en officiell referensbild, **inte en verifierad backup av den version som sitter i just vårt headset**. Innan en framtida modifiering får flashas måste vi:

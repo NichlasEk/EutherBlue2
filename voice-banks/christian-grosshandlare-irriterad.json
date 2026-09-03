@@ -1,0 +1,32 @@
+{
+  "id": "christian-grosshandlare-irriterad",
+  "displayName": "Christian Grosshandlare - irriterad",
+  "language": "sv",
+  "modelBackend": "voxcpm2",
+  "reference": "~/EutherVox/models/moss-reference/stormakt3020/christian-grosshandlare-calm-b.wav",
+  "referenceText": "Välkommen till mitt kontor. Christian Grosshandlare är namnet. Jag köper god vara, säljer till rätt pris och håller ordning på varje tunna och krona. Ge mig fakta i lugn ton, så skall du få ett klart besked och en affär som håller.",
+  "cfgValue": 2.0,
+  "inferenceTimesteps": 20,
+  "prompts": {
+    "power_on": {"text": "Öppna butiken, mannen!", "seed": 206001},
+    "power_off": {"text": "Stäng lagret. Jag är färdig.", "seed": 206002},
+    "low_power": {"text": "Tomt i kassan! Ladda mig!", "seed": 206003},
+    "bt_conn": {"text": "Den är ansluten, för fan, mannen!", "seed": 206025},
+    "bt_dconn": {"text": "Vem kapade handelsleden nu då?", "seed": 206005},
+    "ring": {"text": "Telefon! Svara då, för fan!", "seed": 206006},
+    "game_in": {"text": "Nu blir det affärer!", "seed": 206007},
+    "game_out": {"text": "Nog med spektaklet.", "seed": 206008},
+    "tws_conn": {"text": "Kompisen är med!", "seed": 206009},
+    "tws_dconn": {"text": "Kompisen drog!", "seed": 206010},
+    "anc_on": {"text": "Tyst i handelsboden!", "seed": 206011},
+    "anc_off": {"text": "Släpp in marknaden igen!", "seed": 206012},
+    "anc_trans": {"text": "Jag hör allt, mannen!", "seed": 206013},
+    "adaptive": {"text": "Jag prissätter bullret.", "seed": 206014},
+    "winddet_on": {"text": "Storm över hamnen!", "seed": 206015},
+    "winddet_off": {"text": "Stormen är över.", "seed": 206016},
+    "fit_det_on": {"text": "Sätt dem ordentligt på skallen!", "seed": 206017},
+    "pairing": {"text": "Fram med pappren!", "seed": 206018},
+    "key_pairing": {"text": "Håll knappen, mannen!", "seed": 206019},
+    "def_tone": {"text": "Nå!", "seed": 206020}
+  }
+}
