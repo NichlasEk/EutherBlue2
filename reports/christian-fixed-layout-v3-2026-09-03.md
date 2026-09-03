@@ -6,7 +6,7 @@ Mål: UGREEN Studio Pro / HP206
 
 Bas: officiell UGREEN V0.2.9
 
-Status: **statiskt verifierad, ännu inte skickad till headsetet**
+Status: **statiskt verifierad men avvisad av headsetets slutverifiering**
 
 ## Artefakt
 
@@ -58,13 +58,31 @@ Bygget reproduceras med:
 ./tools/build_christian_firmware.sh
 ```
 
-Artefakten ignoreras av Git. Namnet `UNTESTED` ska behållas tills headsetets
-egen slutverifiering har accepterat filen och en fysisk omstart har lyckats.
+Artefakten ignoreras av Git. Namnet `UNTESTED` behålls eftersom headsetets egen
+slutverifiering inte accepterade filen.
 
 ## Kvarvarande risk
 
-V1 och v2 avvisades vid 99,9 procent med `0x4005`. Fixed-layout v3 tar bort den
-största kvarvarande strukturella skillnaden, men statiska kontroller kan inte
-bevisa att den okända enhetskontrollen accepterar modifierad röstdata. Den
-hashverifierade stock-filen finns kvar för återställning, men hård rollback
+V1 och v2 avvisades vid 99,9 procent med `0x4005`. Fixed-layout v3 tog bort den
+största kvarvarande strukturella skillnaden men avvisades med exakt samma fel.
+Det utesluter de interna WTS-offsetarna och slotstorlekarna som ensam orsak.
+Den hashverifierade stock-filen finns kvar för återställning, men hård rollback
 efter en faktisk bootloop är fortfarande inte bevisad.
+
+## Fysiskt resultat
+
+Telefonen verifierade v3-filens SHA-256 både i `Download` och i appens privata
+OTA-katalog. Endast v3-raden valdes, appen hade en aktiv SPP-session till HP206
+och rapporterade `Dual Mode` före start.
+
+| Kontroll | Resultat |
+|---|---|
+| Överföring | Nådde 99,9 procent utan transportfel |
+| `upgradeStep04` | Hela begärda dataområdet lästes |
+| `upgradeStep05` | `Result : 1 (0x1)` |
+| Fel | `16389 (0x4005): Data verification failure` |
+| Omstartskommando | Skickades inte |
+| Efteråt | Stockbanken fortsatt ansluten och aktiv för A2DP/HFP |
+
+Samma v3-fil ska inte skickas igen. Nästa bygge måste i stället återskapa den
+integritetsmetadata som ändras när `tone_en` ändras.

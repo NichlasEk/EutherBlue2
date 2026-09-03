@@ -67,3 +67,23 @@ den återstående kontrollen har identifierats statiskt.
 
 Råloggen läggs inte i Git eftersom målinformationen innehåller en
 enhetsspecifik auth-nyckel.
+
+## Fysiskt fixed-layout-v3-försök
+
+V3 behöll samtliga 22 interna JLFS-poster på deras originaloffset och använde
+WTS-filer som rymdes inom varje ursprunglig slot. Filen verifierades på
+telefonen med SHA-256
+`725ac44de8dcad03b429ca29a98ff2fea649c625dbe546debdee8fd27162c885`.
+
+| Kontroll | Resultat |
+|---|---|
+| Fil | `HP206_UGREEN_Studio_Pro_V0.2.9_Christian-FIXED-LAYOUT-v3-UNTESTED.ufw` |
+| Sluttid | 12:14:02 lokal tid |
+| Överföring | Nådde 99,9 procent |
+| `upgradeStep05` | `Result : 1 (0x1)` |
+| Fel | `16389 (0x4005): Data verification failure` |
+| Omstartskommando skickat | Nej |
+
+Efter avvisningen förblev Studio Pro ansluten och aktiv för både A2DP och HFP.
+Att v1, v2 och v3 ger identiskt slutresultat trots olika intern layout visar att
+JLFS-posternas flytt eller slotstorlek inte är den återstående orsaken.
