@@ -98,6 +98,22 @@ Verifiera att JLFS-röstcontainern kan byggas om byte-identiskt:
 Verktyget kan därefter få en katalog med WTS-ersättningar via
 `--replacements`. Utdata ligger under `artifacts/build/` och ignoreras av Git.
 
+Verifiera en byte-identisk roundtrip av hela UFW-filen:
+
+```bash
+./tools/build_custom_firmware.py \
+  --original-ufw artifacts/original/firmware/HP206_UGREEN_Studio_Pro_V0.2.9.ufw \
+  --decrypted-flash artifacts/extracted/studio-pro-v0.2.9/decrypted.bin \
+  --original-tone artifacts/extracted/studio-pro-v0.2.9/files/tone_en \
+  --replacement-tone artifacts/extracted/studio-pro-v0.2.9/files/tone_en \
+  --output artifacts/build/roundtrip/HP206-roundtrip.ufw \
+  --require-identical
+```
+
+Byggaren ändrar bara den fasta röstregionen, uppdaterar `flash.bin`-postens CRC
+och räknar om UFW-headerns kontrollsummor. Den har ingen Bluetooth- eller
+OTA-funktion.
+
 ## Säkerhetsgräns
 
 Den hämtade V0.2.9-filen är en officiell referensbild, **inte en verifierad backup av den version som sitter i just vårt headset**. Innan en framtida modifiering får flashas måste vi:

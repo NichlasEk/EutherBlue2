@@ -87,6 +87,13 @@ exakt 56 928 byte, använder 44 480 byte inklusive JLFS-headerdata och lämnar
 12 448 byte marginal. SHA-256 för den modifierade röstcontainern är
 `c295e0732be60a6ac74062f4bf9aab4ff2f6568879fa57d5d5387f174496052a`.
 
+Hela original-UFW:n kördes också genom den nya, avgränsade byggaren med
+originalets `tone_en` som ersättning. Resultatet blev byte-identiskt med
+UGREEN-filen: SHA-256
+`41faae11340001e1d7a5013758296b839e4bbe5c3e86dc859ba9d5aa2fc9a1b6`.
+Kontrollen omfattar UFW-huvudheadern, den krypterade postlistan,
+`flash.bin`-postens CRC och röstregionen vid offset 861 836 i flashbilden.
+
 ## Vad som inte har gjorts
 
 - Headsetet har inte satts i OTA- eller DFU-läge.
