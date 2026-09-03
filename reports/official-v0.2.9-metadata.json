@@ -1,0 +1,21 @@
+{
+  "sourceApi": "https://api3.ugreeniot.com/app/v1/software/version/check_upgrade",
+  "request": {
+    "versionCode": 0,
+    "versionName": "UGREEN Studio Pro",
+    "serialNo": "studio_pro_ota"
+  },
+  "retrievedAt": "2026-09-03T09:28:53+02:00",
+  "response": {
+    "versionCode": 29,
+    "versionName": "0.2.9",
+    "fileName": "HP206_UGREEN_Studio_Pro_V0.2.9.ufw",
+    "fileSize": 2181056,
+    "fileMd5": "b6ceafc8c653b4dff7df2e0f8716142a",
+    "changeList": "Optimize the delayed playback of prompt tones when ANC is enabled.",
+    "upgradeMode": 1,
+    "publishTime": "2026-05-27 07:43:44",
+    "softwareFileMode": 1
+  },
+  "localSha256": "41faae11340001e1d7a5013758296b839e4bbe5c3e86dc859ba9d5aa2fc9a1b6"
+}

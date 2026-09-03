@@ -1,0 +1,8 @@
+# Downloaded vendor binaries and extracted firmware are intentionally local.
+artifacts/original/
+artifacts/extracted/
+.cache/
+
+# Firmware and temporary download files must never be committed accidentally.
+*.ufw
+*.ufw.part
