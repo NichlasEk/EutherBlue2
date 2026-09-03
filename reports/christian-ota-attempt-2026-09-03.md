@@ -43,5 +43,27 @@ postlistans och huvudheaderns CRC. Det nya v2-paketet har SHA-256
 `tail.bin` ändras inte. Dess kodade värde har verifierats vara chipnyckeln
 `0x8887`, inte en innehållssignatur över UFW-filen.
 
+## Fysiskt v2-försök
+
+V2-filen importerades under ett nytt, entydigt namn och SHA-256 verifierades
+både i `Download` och i appens privata OTA-mapp före start. Endast v2-raden var
+markerad i klienten.
+
+| Kontroll | Resultat |
+|---|---|
+| Fil | `HP206_UGREEN_Studio_Pro_V0.2.9_Christian-DUALBANK-v2-UNTESTED.ufw` |
+| SHA-256 | `dc7c1d529cba32cf2def78e30a058978b7771277184d9ee59b3176aa85e1ede5` |
+| Start | 11:18:57 lokal tid |
+| Överföring | Nådde 99,9 % |
+| `upgradeStep05` | `Result : 1 (0x1)` |
+| Fel | `16389 (0x4005): Data verification failure` |
+| Omstartskommando skickat | Nej |
+
+Efter avvisningen var UGREEN Studio Pro fortfarande ACL-ansluten och aktiv för
+både A2DP och HFP. Stockbanken fortsatte alltså att köra. V2-resultatet visar
+att dubbelbanksinkonsistensen var ett verkligt byggfel men inte den enda
+integritetskontrollen som måste återskapas. Inget nytt försök ska göras innan
+den återstående kontrollen har identifierats statiskt.
+
 Råloggen läggs inte i Git eftersom målinformationen innehåller en
 enhetsspecifik auth-nyckel.

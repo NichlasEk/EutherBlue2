@@ -6,7 +6,7 @@ Mål: UGREEN Studio Pro / HP206
 
 Bas: officiell UGREEN V0.2.9
 
-Status: **dubbelbanksbygge v2 statiskt verifierat, ännu inte sänt till hårdvara**
+Status: **dubbelbanksbygge v2 statiskt verifierat men avvisat av hårdvarans slutverifiering**
 
 ## Artefakt
 
@@ -77,10 +77,12 @@ ett modifierat paket. Officiell V0.2.9 har däremot installerats och startat
 framgångsrikt på enheten, och klienten har kvar samma hashverifierade stock-fil
 för återställning.
 
-Kvarstående risk före fysisk v2-test:
+V2 nådde 99,9 % men avvisades av `upgradeStep05` med `0x4005 Data verification
+failure`. Inget omstartskommando skickades och den fungerande stockbanken
+fortsatte köra. Kvarstående risk före ett nytt bygge:
 
 1. hård rollback efter en eventuell bootloop är ännu inte bevisad;
 2. original V0.2.5 har inte återfunnits;
-3. v2-paketet är ännu inte accepterat av headsetets slutverifiering.
+3. den återstående integritetskontrollen i programbilden är ännu inte kartlagd.
 
 Inget byggverktyg i repot innehåller Bluetooth- eller OTA-skrivfunktioner.
