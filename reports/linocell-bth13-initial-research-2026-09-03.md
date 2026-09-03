@@ -12,10 +12,16 @@ Androids Bluetooth-tjänst identifierar den aktiva enheten som `Linocell BTH13`.
 Kjell & Company säljer modellen som svart artikel `24366` och vit artikel
 `24367`. Den officiella manualen är daterad 2024-12-03.
 
+Ett foto av etiketten i det fysiska laddningsetuiet bekräftar att det testade
+paret är den vita varianten `24367`. Etiketten innehåller även koden
+`IK144383`, men den gav ingen relevant publik korsreferens och ska tills vidare
+behandlas som en intern produkt-, inköps- eller batchkod.
+
 Källor:
 
 - [Kjell & Company – Linocell trådlösa in-ear-hörlurar, artikel 24366](https://www.kjell.com/se/produkter/ljud-bild/horlurar-headset/tradlosa-horlurar/linocell-tradlosa-in-ear-horlurar-svart-p24366)
 - [Officiell manual för artikel 24366 och 24367](https://www.kjell.com/globalassets/mediaassets/908220_24366_24367_manual_en_no_sv_20241203.pdf)
+- [EU-försäkran för artikel 24367](https://www.kjell.com/globalassets/mediaassets/889924_24367_doc_en.pdf)
 
 En lokal, Git-ignorerad referenskopia finns i
 `artifacts/references/linocell-bth13/manual-2024-12-03.pdf` med SHA-256:
@@ -23,6 +29,18 @@ En lokal, Git-ignorerad referenskopia finns i
 ```text
 495a15ba9059519b432b7a034b3dbc26fac70a7f2a8c8416b0b803be525f57a6
 ```
+
+EU-försäkran finns också lokalt som `24367-doc-en.pdf` med SHA-256:
+
+```text
+524c029584041772748a02f562666f4cad8b79264537cbc471fa9e96d161e367
+```
+
+Försäkran `DoC-24367-23-09-05` anger Kjell & Co Elektronik AB som ansvarig
+tillverkare/EU-representant och modellnummer `24367`. Den innehåller inget
+OEM-namn, radiocertifierings-ID eller chipset. PDF-titeln nämner Scandsource,
+men detta är Kjell-koncernens sourcingbolag och är inte belägg för vem som
+tillverkat själva elektroniken.
 
 ## Bekräftat från manualen
 

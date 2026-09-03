@@ -11,6 +11,11 @@
       "black": "24366",
       "white": "24367"
     },
+    "testedVariant": {
+      "color": "white",
+      "retailItem": "24367",
+      "labelCode": "IK144383"
+    },
     "testedDevices": 1
   },
   "transport": {
