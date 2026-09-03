@@ -1,7 +1,9 @@
 # Linocell BTH13 – initial skrivskyddad profil
 
-Datum: 2026-09-03  
-Profilstatus: `research`  
+Datum: 2026-09-03
+
+Profilstatus: `research`
+
 Fysisk enhet: ett anslutet par; Bluetooth-adressen lagras inte i Git.
 
 ## Identifiering
@@ -56,6 +58,19 @@ Telefon: Pixel 9a, ansluten via USB-debugging. Följande lästes med
 - Ingen Linocell-app finns installerad. Den befintliga JieLi OTA-appen härrör
   från HP206-arbetet och är inte bevis för att BTH13 använder JieLi.
 
+## USB-prov
+
+Båda snäckorna placerades i laddningsetuiet och etuiet anslöts i normalt läge
+till samma fungerande USB-kabel och datorport som nyss hade burit ADB-trafik
+från Pixel-telefonen. Kärnloggen registrerade att telefonen kopplades bort
+2026-09-03 14:17:40, men registrerade ingen ny USB-enhet efteråt.
+
+Kontroller med `lsusb`, USB-topologin i sysfs och en sökning efter `ttyACM`,
+`ttyUSB`, `hidraw` samt DFU visade ingen enhet som kunde höra till fodralet.
+Fodralet enumererar därför inte som USB-enhet i normalt läge. Resultatet stöder
+manualens beskrivning av porten som en ren laddningsport. Ett odokumenterat
+fabriksläge kan inte uteslutas enbart av detta prov.
+
 ## Slutsats
 
 Det finns ännu ingen synlig firmware- eller styrtransport. Standardprofilerna
@@ -72,11 +87,9 @@ identifierats.
 
 1. Fotografera all text på laddningsetuiets undersida, kartong och eventuella
    regulatoriska etiketter; OEM- eller certifieringsnummer kan avslöja chipset.
-2. Kontrollera om laddningsetuiet enumererar som USB-enhet. Manualen talar bara
-   om laddning, så frånvaro av USB-data är förväntad.
-3. Om mer radioinformation behövs kan en kort HCI-snoop av en vanlig
+2. Om mer radioinformation behövs kan en kort HCI-snoop av en vanlig
    frånkoppling/återanslutning göras senare. Det kräver att diagnostikloggning
    slås på uttryckligen eftersom loggen kan innehålla privat Bluetooth-trafik.
-4. Öppna eller löd inte i snäckorna innan modellmärkning och externa
+3. Öppna eller löd inte i snäckorna innan modellmärkning och externa
    firmwarekällor är uttömda; de små Li-po-cellerna gör fysisk åtkomst mer
    riskfylld än på ett over-ear-headset.

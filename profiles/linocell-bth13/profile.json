@@ -17,6 +17,12 @@
     "control": "avrcp-and-hfp-only-observed",
     "ota": "not-observed",
     "usbData": false,
+    "usbProbe": {
+      "tested": true,
+      "date": "2026-09-03",
+      "mode": "charging-case-with-both-earbuds-normal-mode",
+      "result": "no-usb-enumeration"
+    },
     "otaClient": "none-known",
     "bluetoothVersion": "5.3",
     "radio": "br-edr",
