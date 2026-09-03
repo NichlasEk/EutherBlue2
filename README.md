@@ -139,6 +139,16 @@ Kontrollen ska för närvarande svara `NOT READY`: dubbelbanksstödet är avläs
 men en stock-restoration och hård rollback är ännu inte fysiskt verifierade.
 Se [återställningsrapporten](reports/recovery-readiness-2026-09-03.md).
 
+Förbered ett lokalt, inert Android-återställningskit från JieLis officiella,
+pinnade klient och vår verifierade stock-fil:
+
+```bash
+./tools/prepare_android_recovery_kit.sh
+```
+
+Resultatet hamnar i ignorerade `artifacts/recovery-kit/`. Skriptet installerar
+ingenting, använder inte ADB eller Bluetooth och kan inte starta OTA.
+
 ## Säkerhetsgräns
 
 Den hämtade V0.2.9-filen är en officiell referensbild, **inte en verifierad backup av den version som sitter i just vårt headset**. Innan en framtida modifiering får flashas måste vi:

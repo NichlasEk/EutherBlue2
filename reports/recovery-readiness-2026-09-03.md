@@ -73,6 +73,18 @@ exitkod 2 och `NOT READY` tills även de fysiskt testade återställningsbevisen
 finns. Flaggor och lyckade firmwarebyggen får aldrig automatiskt göra dessa
 grindar gröna.
 
+Ett inert Android-kit kan förberedas med:
+
+```bash
+./tools/prepare_android_recovery_kit.sh
+```
+
+Skriptet hämtar JieLis signerade exempelklient från den pinnade upstream-
+committen `4bf054e1ae6e549b617e266cea733576c80c55d5`, verifierar APK:ns SHA-256,
+kopierar endast officiell stock-firmware och skriver ett manifest. Det kör
+aldrig `adb`, Bluetooth eller OTA. Kitet är referensmotorn för det första
+stock-testet; vår striktare, modellspecifika klient återstår att bygga.
+
 ## Nuvarande grindar
 
 | Grind | Status |

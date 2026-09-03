@@ -4,6 +4,7 @@ artifacts/extracted/
 artifacts/captures/
 artifacts/previews/
 artifacts/build/
+artifacts/recovery-kit/
 .cache/
 __pycache__/
 *.pyc
