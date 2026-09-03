@@ -9,6 +9,7 @@ DECODER_SHA256="d9388e8eedb7a3b4295d1f524c347e70512412ac54712e1737196f8380ff663b
 INPUT="${1:-artifacts/previews/christian-grosshandlare-irriterad/full-bank}"
 OUTPUT="${2:-artifacts/build/christian-grosshandlare-irriterad/wts}"
 BITRATE="${EUTHERBLUE_WTS_BITRATE:-12000}"
+TEMPO_MAP="${EUTHERBLUE_WTS_TEMPO_MAP:-}"
 CACHE_DIR="${EUTHERBLUE_CACHE_DIR:-.cache}"
 TOOLS_DIR="$CACHE_DIR/jieli-tone-tools"
 ENCODER="$TOOLS_DIR/wtgv2_encode.exe"
@@ -30,6 +31,22 @@ done
     exit 1
 }
 mkdir -p "$TOOLS_DIR" "$OUTPUT" "$OUTPUT/decoded-check"
+
+declare -A TEMPO_FACTORS=()
+if [[ -n "$TEMPO_MAP" ]]; then
+    [[ -f "$TEMPO_MAP" ]] || {
+        echo "Tempokartan saknas: $TEMPO_MAP" >&2
+        exit 1
+    }
+    while read -r prompt factor extra; do
+        [[ -z "${prompt:-}" || "$prompt" == \#* ]] && continue
+        [[ -z "${extra:-}" && "$factor" =~ ^[0-9]+([.][0-9]+)?$ ]] || {
+            echo "Ogiltig rad i tempokartan: $prompt ${factor:-} ${extra:-}" >&2
+            exit 1
+        }
+        TEMPO_FACTORS["$prompt"]="$factor"
+    done < "$TEMPO_MAP"
+fi
 
 fetch_tool() {
     local name="$1"
@@ -60,8 +77,13 @@ while IFS= read -r -d '' source_file; do
     pcm_16k="$temp_dir/$prompt-16k.raw"
     destination="$OUTPUT/$prompt.wts"
     decoded="$OUTPUT/decoded-check/$prompt.wav"
-    ffmpeg -hide_banner -loglevel error -y -i "$source_file" \
-        -ar 32000 -ac 1 -f s16le -acodec pcm_s16le "$pcm_32k"
+    tempo="${TEMPO_FACTORS[$prompt]:-1.0}"
+    ffmpeg_args=(-hide_banner -loglevel error -y -i "$source_file")
+    if [[ "$tempo" != "1" && "$tempo" != "1.0" ]]; then
+        ffmpeg_args+=(-filter:a "atempo=$tempo")
+    fi
+    ffmpeg "${ffmpeg_args[@]}" -ar 32000 -ac 1 -f s16le \
+        -acodec pcm_s16le "$pcm_32k"
     wine "$RESAMPLER" "$(winepath -w "$pcm_32k")" "$(winepath -w "$pcm_16k")" \
         >/dev/null 2>&1
     wine "$ENCODER" "$(winepath -w "$pcm_16k")" "$(winepath -w "$destination")" \
@@ -75,7 +97,7 @@ while IFS= read -r -d '' source_file; do
     size="$(stat -c %s "$destination")"
     total_bytes=$((total_bytes + size))
     encoded=$((encoded + 1))
-    printf '%-14s %6d byte\n' "$prompt" "$size"
+    printf '%-14s %6d byte  tempo %s\n' "$prompt" "$size" "$tempo"
 done < <(find "$INPUT" -maxdepth 1 -type f -name '*-16k-stereo.wav' -print0 | sort -z)
 
 [[ "$encoded" -eq 20 ]] || {

@@ -104,7 +104,11 @@ def make_header(
     return struct.pack("<H30s", jl_crc16(fields), fields)
 
 
-def rebuild(original: bytes, replacement_dir: Path | None) -> tuple[bytes, dict]:
+def rebuild(
+    original: bytes,
+    replacement_dir: Path | None,
+    preserve_layout: bool = False,
+) -> tuple[bytes, dict]:
     outer, entries = parse_library(original)
     replacements: dict[str, bytes] = {}
     if replacement_dir is not None:
@@ -113,6 +117,84 @@ def rebuild(original: bytes, replacement_dir: Path | None) -> tuple[bytes, dict]
         unknown = replacements.keys() - {entry.name for entry in entries}
         if unknown:
             raise ValueError("okända ersättningsfiler: " + ", ".join(sorted(unknown)))
+
+    if preserve_layout:
+        result = bytearray(original)
+        manifest_entries = []
+        for position, entry in enumerate(entries):
+            data = replacements.get(entry.name, entry.data)
+            next_offset = (
+                entries[position + 1].offset
+                if position + 1 < len(entries)
+                else len(original)
+            )
+            capacity = next_offset - entry.offset
+            if len(data) > capacity:
+                raise ValueError(
+                    f"{entry.name} är {len(data)} byte men det fasta utrymmet är "
+                    f"bara {capacity} byte"
+                )
+            header_offset = HEADER_SIZE + position * HEADER_SIZE
+            result[header_offset : header_offset + HEADER_SIZE] = make_header(
+                jl_crc16(data),
+                entry.offset,
+                len(data),
+                entry.flags,
+                entry.reserved,
+                entry.index,
+                entry.raw_name,
+            )
+            result[entry.offset : next_offset] = b"\xFF" * capacity
+            result[entry.offset : entry.offset + len(data)] = data
+            manifest_entries.append(
+                {
+                    "name": entry.name,
+                    "offset": entry.offset,
+                    "originalOffset": entry.offset,
+                    "size": len(data),
+                    "originalSize": entry.size,
+                    "capacity": capacity,
+                    "sha256": sha256(data),
+                    "replaced": entry.name in replacements,
+                }
+            )
+
+        (
+            _,
+            outer_offset,
+            outer_size,
+            outer_flags,
+            outer_reserved,
+            outer_index,
+            outer_name,
+        ) = outer
+        body = bytes(result[HEADER_SIZE:])
+        result[:HEADER_SIZE] = make_header(
+            jl_crc16(body),
+            outer_offset,
+            outer_size,
+            outer_flags,
+            outer_reserved,
+            outer_index,
+            outer_name,
+        )
+        rebuilt = bytes(result)
+        _, rebuilt_entries = parse_library(rebuilt)
+        if [entry.offset for entry in rebuilt_entries] != [entry.offset for entry in entries]:
+            raise ValueError("en intern offset ändrades trots --preserve-layout")
+        return rebuilt, {
+            "originalSize": len(original),
+            "rebuiltSize": len(rebuilt),
+            "usedBytes": max(entry.offset + entry.size for entry in rebuilt_entries),
+            "freeBytes": sum(
+                item["capacity"] - item["size"] for item in manifest_entries
+            ),
+            "originalSha256": sha256(original),
+            "rebuiltSha256": sha256(rebuilt),
+            "byteIdentical": rebuilt == original,
+            "layoutPreserved": True,
+            "entries": manifest_entries,
+        }
 
     data_offset = align(HEADER_SIZE + len(entries) * HEADER_SIZE)
     headers = bytearray()
@@ -172,6 +254,7 @@ def rebuild(original: bytes, replacement_dir: Path | None) -> tuple[bytes, dict]
         "originalSha256": sha256(original),
         "rebuiltSha256": sha256(result),
         "byteIdentical": result == original,
+        "layoutPreserved": False,
         "entries": manifest_entries,
     }
 
@@ -183,13 +266,18 @@ def main() -> int:
     parser.add_argument("--replacements", type=Path)
     parser.add_argument("--manifest", type=Path)
     parser.add_argument(
+        "--preserve-layout",
+        action="store_true",
+        help="keep every original entry offset and reject replacements that do not fit",
+    )
+    parser.add_argument(
         "--require-identical",
         action="store_true",
         help="fail unless the rebuilt file is byte-identical to the original",
     )
     args = parser.parse_args()
     original = args.original.read_bytes()
-    rebuilt, manifest = rebuild(original, args.replacements)
+    rebuilt, manifest = rebuild(original, args.replacements, args.preserve_layout)
     if args.require_identical and not manifest["byteIdentical"]:
         raise SystemExit("Roundtrippen blev inte byte-identisk")
     args.output.parent.mkdir(parents=True, exist_ok=True)

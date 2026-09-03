@@ -1,0 +1,6 @@
+# Prompt    atempo
+# Only prompts that exceed their original fixed JLFS slot at 8 kbit/s need
+# shortening. JieLi's decoder does not accept padding after a valid WTS stream.
+pairing     1.35
+tws_conn    1.30
+tws_dconn   1.15

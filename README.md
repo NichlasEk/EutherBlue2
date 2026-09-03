@@ -79,7 +79,7 @@ Rendera den valda, irriterade Christian Grosshandlare-röstbanken med samtliga
 Repliker och reproducerbara seeds finns i
 `voice-banks/christian-grosshandlare-irriterad.json`.
 
-Koda den renderade banken till JieLi WTS vid 12 kbit/s och avkoda varje fil som
+Koda den renderade banken till JieLi WTS och avkoda varje fil som
 roundtrip-kontroll:
 
 ```bash
@@ -96,7 +96,9 @@ Verifiera att JLFS-röstcontainern kan byggas om byte-identiskt:
 ```
 
 Verktyget kan därefter få en katalog med WTS-ersättningar via
-`--replacements`. Utdata ligger under `artifacts/build/` och ignoreras av Git.
+`--replacements`. Använd `--preserve-layout` för att behålla varje intern
+originaloffset och avbryta om en ersättning inte ryms i sin fasta plats. Utdata
+ligger under `artifacts/build/` och ignoreras av Git.
 
 Verifiera en byte-identisk roundtrip av hela UFW-filen:
 
@@ -123,9 +125,10 @@ Kör hela det verifierade Christian-bygget med ett kommando:
 Skriptet kräver både en byte-identisk röstcontainer-roundtrip och en
 byte-identisk hel-UFW-roundtrip, kodar och kontrollavkodar 20 WTS-filer, bygger
 den modifierade UFW:n och låter den oberoende uppackaren läsa tillbaka den
-inbyggda röstcontainern. Resultatet märks uttryckligen
-`UNTESTED-NOT-FOR-FLASH` tills en återställningsväg har verifierats på hårdvaran.
-Se [byggrapporten](reports/christian-firmware-build-2026-09-03.md) för exakt
+inbyggda röstcontainern. V3 kodar vid 8 kbit/s och behåller samtliga interna
+originaloffsetar. Resultatet märks uttryckligen `UNTESTED` tills headsetets egen
+slutverifiering har accepterat det. Se
+[fixed-layout-v3-rapporten](reports/christian-fixed-layout-v3-2026-09-03.md) för
 artefaktsökväg, SHA-256, valideringar och kvarvarande risker.
 
 Kontrollera återställningsgrindarna utan att ansluta eller skriva till

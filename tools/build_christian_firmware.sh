@@ -5,7 +5,9 @@ ORIGINAL_UFW="${1:-artifacts/original/firmware/HP206_UGREEN_Studio_Pro_V0.2.9.uf
 EXTRACTED="${2:-artifacts/extracted/studio-pro-v0.2.9}"
 PREVIEWS="${3:-artifacts/previews/christian-grosshandlare-irriterad/full-bank}"
 OUTPUT="${4:-artifacts/build/christian-grosshandlare-irriterad}"
-FIRMWARE="$OUTPUT/HP206_UGREEN_Studio_Pro_V0.2.9_Christian-DUALBANK-v2-UNTESTED.ufw"
+FIRMWARE="$OUTPUT/HP206_UGREEN_Studio_Pro_V0.2.9_Christian-FIXED-LAYOUT-v3-UNTESTED.ufw"
+BITRATE="${EUTHERBLUE_WTS_BITRATE:-8000}"
+TEMPO_MAP="${EUTHERBLUE_WTS_TEMPO_MAP:-voice-banks/christian-grosshandlare-irriterad-fixed-layout.tempo}"
 
 for required in \
     "$ORIGINAL_UFW" \
@@ -23,7 +25,8 @@ done
 }
 
 mkdir -p "$OUTPUT" "$OUTPUT/roundtrip"
-./tools/encode_voice_bank_wts.sh "$PREVIEWS" "$OUTPUT/wts"
+EUTHERBLUE_WTS_BITRATE="$BITRATE" EUTHERBLUE_WTS_TEMPO_MAP="$TEMPO_MAP" \
+    ./tools/encode_voice_bank_wts.sh "$PREVIEWS" "$OUTPUT/wts-v3-fixed"
 ./tools/repack_tone_library.py \
     "$EXTRACTED/files/tone_en" \
     "$OUTPUT/roundtrip/tone_en" \
@@ -32,7 +35,8 @@ mkdir -p "$OUTPUT" "$OUTPUT/roundtrip"
 ./tools/repack_tone_library.py \
     "$EXTRACTED/files/tone_en" \
     "$OUTPUT/tone_en" \
-    --replacements "$OUTPUT/wts" \
+    --replacements "$OUTPUT/wts-v3-fixed" \
+    --preserve-layout \
     --manifest "$OUTPUT/tone_en.manifest.json" >/dev/null
 ./tools/build_custom_firmware.py \
     --original-ufw "$ORIGINAL_UFW" \
@@ -64,6 +68,7 @@ cmp "$OUTPUT/tone_en" "$validation_dir/files/tone_en"
 ./tools/repack_tone_library.py \
     "$validation_dir/files/tone_en" \
     "$validation_parent/tone_en-roundtrip" \
+    --preserve-layout \
     --require-identical >/dev/null
 
 original_sha="$(sha256sum "$ORIGINAL_UFW" | cut -d ' ' -f 1)"
