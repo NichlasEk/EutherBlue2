@@ -105,6 +105,22 @@
   },
   "firmware": {
     "format": "JieLi new-firmware/JLFS candidate; requires stock dump",
+    "referenceImages": [
+      {
+        "purpose": "format-and-platform-reference-only-do-not-flash",
+        "platform": "BR30 AC897N/AD697N earphone SDK V2.3.2",
+        "source": "https://github.com/GZHXXY/AC897N_AD697N_earphone_release_V2.3.2",
+        "sourceCommit": "a55d953c15e4b9133d8b6b1bc95fabddb2922003",
+        "sourcePath": "cpu/br30/tools/earphone/standard/update.ufw",
+        "size": 1147776,
+        "sha256": "2ea569fdd8b0dc0dcb5ec0ca6a9d96ab291752a5e41920f6dd5dd7037a4e3c8b",
+        "containerChipName": "AD697N",
+        "promptContainer": "tone/TIDX",
+        "promptFormat": "WTS",
+        "promptCount": 16,
+        "report": "reports/linocell-bth13-br30-reference-firmware-2026-09-03.md"
+      }
+    ],
     "readoutCandidate": {
       "method": "JieLi MaskROM UBOOT1.00 over direct SoC USB D+/D-",
       "tool": "kagaimiq/jl-uboot-tool",
@@ -131,7 +147,7 @@
   },
   "voice": {
     "container": "JieLi tone directory candidate",
-    "format": "WTG and/or MP3 candidate; requires stock dump",
+    "format": "WTS is the strongest BR30 reference candidate; requires BTH13 stock dump",
     "originalPath": "artifacts/extracted/linocell-bth13/voice.bin",
     "promptCount": null,
     "preserveLayout": false,
