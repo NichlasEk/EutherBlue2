@@ -1,7 +1,9 @@
 # Återställningsberedskap före första OTA-testet
 
-Datum: 2026-09-03  
-Enhet: UGREEN Studio Pro / HP206  
+Datum: 2026-09-03
+
+Enhet: UGREEN Studio Pro / HP206
+
 Installerad produkt-firmware: V0.2.5
 
 ## Slutsats
