@@ -21,6 +21,24 @@
   "transport": {
     "control": "avrcp-and-hfp-only-observed",
     "ota": "not-observed",
+    "jieliTransportProbe": {
+      "date": "2026-09-03",
+      "normalMode": {
+        "bleAdvertisementObserved": false,
+        "gattAttributesObserved": false,
+        "sppProfileResult": "profile-unavailable",
+        "jieliGattOverBrEdrProfileResult": "profile-unavailable"
+      },
+      "officialSignatures": {
+        "bleServiceUuid": "0000ae00-0000-1000-8000-00805f9b34fb",
+        "bleWriteUuid": "0000ae01-0000-1000-8000-00805f9b34fb",
+        "bleNotifyUuid": "0000ae02-0000-1000-8000-00805f9b34fb",
+        "sppUuid": "00001101-0000-1000-8000-00805f9b34fb",
+        "gattOverBrEdrUuid": "0000ae00-0000-1000-8000-00805f9b34fc"
+      },
+      "applicationPacketsSent": 0,
+      "report": "reports/linocell-bth13-jieli-transport-probe-2026-09-03.md"
+    },
     "usbData": false,
     "usbProbe": {
       "tested": true,

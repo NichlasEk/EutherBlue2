@@ -142,6 +142,12 @@ den tjänsten.
 
 - [JieLi – iOS JL OTA, stödda familjer och transportkrav](https://github.com/Jieli-Tech/iOS-JL_OTA/blob/master/README_EN.md)
 
+En separat passiv transportkartläggning jämförde dessutom lurarna med JieLis
+officiella standard-UUID:er. Varken BLE-annons, GATT-attribut, SPP eller JieLis
+GATT-over-BR/EDR-profil var tillgänglig i normalläge:
+
+- [Passiv JieLi-transportkartläggning](linocell-bth13-jieli-transport-probe-2026-09-03.md)
+
 ## USB-prov
 
 Båda snäckorna placerades i laddningsetuiet och etuiet anslöts i normalt läge
