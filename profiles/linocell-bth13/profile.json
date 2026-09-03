@@ -29,6 +29,12 @@
         "sppProfileResult": "profile-unavailable",
         "jieliGattOverBrEdrProfileResult": "profile-unavailable"
       },
+      "factoryResetWindow": {
+        "bleAdvertisementObserved": false,
+        "jieliAe00Observed": false,
+        "classicHostIdentitiesObserved": 1,
+        "twsResult": "single-host-identity-observed"
+      },
       "officialSignatures": {
         "bleServiceUuid": "0000ae00-0000-1000-8000-00805f9b34fb",
         "bleWriteUuid": "0000ae01-0000-1000-8000-00805f9b34fb",

@@ -62,13 +62,31 @@ BTH13 exponerar alltså varken JieLis standard-SPP eller standardprofil för
 GATT-over-BR/EDR i sitt vanliga driftläge. Den tidigare datatypen `0xfe` är
 annonsmetadata och ska inte sammanblandas med SPP-UUID `fe01`.
 
+## Fabriksåterställningens omstartsfönster
+
+Datorns gamla bondning togs bort för att hindra automatisk återanslutning.
+Medan en 90 sekunder lång HCI-monitor och en 80 sekunder lång LE-skanning var
+aktiva utfördes manualens sex snabba tryck på båda snäckorna. Användaren såg
+röd/vit blinkning med olika mönster på vänster och höger snäcka.
+
+Ingen BLE-annons från BTH13, inget company ID `0x05D6` och ingen JieLi-tjänst
+`AE00` syntes under reset- eller omstartsfönstret. En svag anonym BLE-enhet som
+syntes i närheten annonserade en Google-tjänst och kunde avgränsas från
+BTH13.
+
+En efterföljande 20 sekunder lång BR/EDR-skanning hittade exakt en närliggande
+identitet med namnet `Linocell BTH13`. Det visar att det asymmetriska
+LED-mönstret inte motsvarade två separata värdenheter: snäckorna hade bildat
+ett internt TWS-par och exponerade en gemensam Classic-identitet.
+
 ## Tolkning
 
 JieLi-chipet är bekräftat via HCI, men RCSP/OTA verkar vara bortbyggt, avstängt
 eller endast tillgängligt i ett separat uppgraderingsläge. Frånvaron i
 normalläge bevisar inte vilket av dessa tre fall som gäller.
 
-Nästa säkra prov är en ren LE-skanning under det dokumenterade sextrycks-reset-
-och omstartsfönstret. Om ingen separat annons eller `AE00`-tjänst syns där
-heller krävs antingen en produktspecifik app/firmwarekälla eller fysisk
-chip-/flashidentifiering innan någon firmwareväg kan fastställas.
+Eftersom inte heller resetfönstret exponerade en separat annons eller
+`AE00`-tjänst krävs nu antingen en produktspecifik app/firmwarekälla eller
+fysisk chip-/flashidentifiering innan någon firmwareväg kan fastställas. Ett
+godtyckligt OTA-försök är inte motiverat utan en stockfil och en verifierad
+återställningsväg.
