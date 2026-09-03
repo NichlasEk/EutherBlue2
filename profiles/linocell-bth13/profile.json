@@ -148,6 +148,20 @@
   "voice": {
     "container": "JieLi tone directory candidate",
     "format": "WTS is the strongest BR30 reference candidate; requires BTH13 stock dump",
+    "offlineReferenceBank": {
+      "status": "passes-public-br30-reference-layout",
+      "config": "voice-banks/christian-grosshandlare-irriterad-bth13.json",
+      "layout": "profiles/linocell-bth13/reference-tone-layout.json",
+      "promptCount": 16,
+      "bitrate": 8000,
+      "payloadSize": 17977,
+      "referencePayloadLimit": 21683,
+      "containerSize": 22544,
+      "containerSha256": "b07c2ea0fde106ed970afd11fa7833b41082ee52199d95c44bbebae46dd95e03",
+      "deviceWritten": false,
+      "bth13CompatibilityVerified": false,
+      "report": "reports/linocell-bth13-grosshandlare-reference-bank-2026-09-03.md"
+    },
     "originalPath": "artifacts/extracted/linocell-bth13/voice.bin",
     "promptCount": null,
     "preserveLayout": false,

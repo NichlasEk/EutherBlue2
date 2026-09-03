@@ -62,7 +62,7 @@ def parse_library(buffer: bytes) -> tuple[tuple[int, int, int, int, int, int, by
         raise ValueError("oväntad yttre JLFS-header")
     if jl_crc16(buffer[HEADER_SIZE:]) != outer_data_crc:
         raise ValueError("fel data-CRC för ursprungligt röstbibliotek")
-    if raw_outer_name.split(b"\0", 1)[0] not in {b"tone_en", b"tone_zh"}:
+    if raw_outer_name.split(b"\0", 1)[0] not in {b"tone", b"tone_en", b"tone_zh"}:
         raise ValueError("filen är inte ett känt röstbibliotek")
 
     entries: list[Entry] = []

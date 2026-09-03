@@ -81,6 +81,16 @@ Avkoda alla extraherade WTS-prompter till WAV:
 
 Resultaten hamnar under `artifacts/` och ignoreras av Git. Se [analysrapporten](reports/initial-firmware-analysis-2026-09-03.md) för hashvärden, filinventering och nästa säkra steg.
 
+Bygg den skrivskyddade grosshandlarbanken mot den publika BR30-referensens
+16 WTS-slots utan att ansluta till en lur:
+
+```bash
+./tools/build_bth13_reference_voice_bank.sh
+```
+
+Detta skapar endast lokala ljud- och `tone`-resurser. Referensen är inte en
+verifierad BTH13-firmware och får inte flashas till lurarna.
+
 ## Provröster
 
 Skapa tre lokala versioner av Christian Grosshandlares Bluetooth-anslutningsfras
