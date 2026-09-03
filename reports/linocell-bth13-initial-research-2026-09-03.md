@@ -76,6 +76,41 @@ Telefon: Pixel 9a, ansluten via USB-debugging. Följande lästes med
 - Ingen Linocell-app finns installerad. Den befintliga JieLi OTA-appen härrör
   från HP206-arbetet och är inte bevis för att BTH13 använder JieLi.
 
+## Datorparning och radiosignatur
+
+Efter att telefonens Bluetooth stängts av upptäckte datorn den fysiska enheten
+som `Linocell BTH13`. Första parningen skedde innan snäckorna hade bildat sitt
+interna TWS-par och gav därför bara ljud i ena snäckan. Datorns bondning togs
+bort och manualens sextrycks-reset utfördes på båda snäckorna samtidigt. Efter
+omstart bildade de ett par och anslöts som en enda värdenhet.
+
+PipeWire exponerade därefter en stereosink med separata vänster- och
+högerkanaler. BlueZ rapporterade ansluten och bondad enhet samt 100 procent
+batteri vid mättillfället. Bluetooth-adressen lagras inte i Git.
+
+Parningen gav fler skrivskyddade identitetsfält:
+
+```text
+PnP modalias:          bluetooth:v05D6p000Ad0240
+Manufacturer ID:       0x7262 (29282)
+Manufacturer data:     32327878112233445566aabb0000
+Custom AD type:        0xfe
+Custom AD data:        a262322e332e352d4032303232313231332d2464633961
+Decoded build string:  b2.3.5-@20221213-$dc9a
+```
+
+Byggsträngen ser ut att innehålla version `2.3.5`, datum `2022-12-13` och ett
+kort bygg-ID `dc9a`. Fältens betydelse är ännu inte styrkt av ett SDK och de
+lagras därför som fingerprint, inte som bekräftad produkt-firmwareversion.
+
+Samma manufacturer-ID och testmönster förekommer publikt på flera billiga
+Bluetooth-ljudenheter. Det är alltså en användbar familjesignatur men ännu inte
+bevis för en viss chipmodell. PnP-aliaset räcker inte heller som chipsetbevis.
+Jämförelseexempel:
+
+- [TWS88 med samma manufacturerdata och PnP-alias](https://paul.grozav.info/kb/linux/bluetooth)
+- [YMIOT-BT med samma manufacturerdata](https://forums.raspberrypi.com/viewtopic.php?t=378494)
+
 ## USB-prov
 
 Båda snäckorna placerades i laddningsetuiet och etuiet anslöts i normalt läge

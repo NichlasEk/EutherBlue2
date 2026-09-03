@@ -38,10 +38,26 @@
       "bitsPerSample": 16,
       "channels": 2
     },
+    "pnpModalias": "bluetooth:v05D6p000Ad0240",
+    "advertisingFingerprint": {
+      "manufacturerId": 29282,
+      "manufacturerIdHex": "0x7262",
+      "manufacturerDataHex": "32327878112233445566aabb0000",
+      "customDataType": 254,
+      "customDataHex": "a262322e332e352d4032303232313231332d2464633961",
+      "decodedBuildString": "b2.3.5-@20221213-$dc9a"
+    },
+    "twsPairingTest": {
+      "date": "2026-09-03",
+      "factoryReset": "six-rapid-presses-on-both-earbuds",
+      "result": "single-host-identity-stereo-output-confirmed"
+    },
     "serviceUuids": [
       "0000110b-0000-1000-8000-00805f9b34fb",
+      "0000110c-0000-1000-8000-00805f9b34fb",
       "0000110e-0000-1000-8000-00805f9b34fb",
-      "0000111e-0000-1000-8000-00805f9b34fb"
+      "0000111e-0000-1000-8000-00805f9b34fb",
+      "00001200-0000-1000-8000-00805f9b34fb"
     ]
   },
   "firmware": {
