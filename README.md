@@ -114,6 +114,20 @@ Byggaren ändrar bara den fasta röstregionen, uppdaterar `flash.bin`-postens CR
 och räknar om UFW-headerns kontrollsummor. Den har ingen Bluetooth- eller
 OTA-funktion.
 
+Kör hela det verifierade Christian-bygget med ett kommando:
+
+```bash
+./tools/build_christian_firmware.sh
+```
+
+Skriptet kräver både en byte-identisk röstcontainer-roundtrip och en
+byte-identisk hel-UFW-roundtrip, kodar och kontrollavkodar 20 WTS-filer, bygger
+den modifierade UFW:n och låter den oberoende uppackaren läsa tillbaka den
+inbyggda röstcontainern. Resultatet märks uttryckligen
+`UNTESTED-NOT-FOR-FLASH` tills en återställningsväg har verifierats på hårdvaran.
+Se [byggrapporten](reports/christian-firmware-build-2026-09-03.md) för exakt
+artefaktsökväg, SHA-256, valideringar och kvarvarande risker.
+
 ## Säkerhetsgräns
 
 Den hämtade V0.2.9-filen är en officiell referensbild, **inte en verifierad backup av den version som sitter i just vårt headset**. Innan en framtida modifiering får flashas måste vi:
