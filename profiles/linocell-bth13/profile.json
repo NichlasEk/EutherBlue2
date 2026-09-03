@@ -62,6 +62,20 @@
       "result": "no-usb-enumeration"
     },
     "otaClient": "none-known",
+    "chargestoreReadOnlyCandidate": {
+      "status": "protocol-reconstructed-offline-electrical-interface-unverified",
+      "interface": "single-wire half-duplex UART over LDOIN or charge contact candidate",
+      "initialBaudrate": 9600,
+      "framing": "55aa-length-payload-crc8-poly-0x8c-lsb-first",
+      "safeQueries": [
+        "bluetooth-name",
+        "sdk-version",
+        "battery"
+      ],
+      "serialIoImplemented": false,
+      "physicalUnitVerified": false,
+      "report": "reports/linocell-bth13-chargestore-readonly-path-2026-09-03.md"
+    },
     "bluetoothVersion": "5.3",
     "radio": "br-edr",
     "audio": {
