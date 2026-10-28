@@ -1,0 +1,25 @@
+{
+  "id": "christian-grosshandlare-hd350bt",
+  "displayName": "Christian Grosshandlare - HD 350BT",
+  "language": "sv",
+  "modelBackend": "voxcpm2",
+  "reference": "~/EutherVox/models/moss-reference/stormakt3020/christian-grosshandlare-calm-b.wav",
+  "referenceText": "Välkommen till mitt kontor. Christian Grosshandlare är namnet. Jag köper god vara, säljer till rätt pris och håller ordning på varje tunna och krona. Ge mig fakta i lugn ton, så skall du få ett klart besked och en affär som håller.",
+  "cfgValue": 2.0,
+  "inferenceTimesteps": 20,
+  "prompts": {
+    "0": {"event": "SLC Connected", "text": "Ansluten!", "seed": 350000},
+    "1": {"event": "Link Loss or Disconnected", "text": "Frånkopplad!", "seed": 350001},
+    "2": {"event": "Reject", "text": "Nekat!", "seed": 350002},
+    "3": {"event": "Last Number Redial", "text": "Ringer!", "seed": 350003},
+    "4": {"event": "Cancel or End", "text": "Avslutat!", "seed": 350004},
+    "5": {"event": "Battery Low", "text": "Ladda mig!", "seed": 350005},
+    "6": {"event": "Gas Gauge 0", "text": "Batteriet tomt!", "seed": 350006},
+    "7": {"event": "Gas Gauge 1", "text": "Batteriet lågt!", "seed": 350007},
+    "8": {"event": "Gas Gauge 2", "text": "Batteriet halvfullt!", "seed": 350008},
+    "9": {"event": "Gas Gauge 3", "text": "Batteriet fullt!", "seed": 350009},
+    "10": {"event": "Power On", "text": "Öppet!", "seed": 350010},
+    "11": {"event": "Power Off", "text": "Stängt!", "seed": 350011},
+    "12": {"event": "Enter Pairing", "text": "Kopplar!", "seed": 350012}
+  }
+}

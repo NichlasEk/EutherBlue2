@@ -6,6 +6,7 @@ artifacts/previews/
 artifacts/build/
 artifacts/recovery-kit/
 artifacts/references/
+artifacts/research/hd350bt/
 .cache/
 __pycache__/
 *.pyc
