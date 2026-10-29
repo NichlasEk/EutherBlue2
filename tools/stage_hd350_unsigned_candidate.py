@@ -5,6 +5,7 @@ This is a physical flash write to the INACTIVE image bank. The active 5.5.0
 bank is not selected or committed by this tool. It deliberately contains no
 TRANSFER_COMPLETE_RES, COMMIT, ABORT, ERASE, reset, or bank-swap command.
 """
+from local_device import bluetooth_address
 import argparse
 import hashlib
 import json
@@ -73,7 +74,7 @@ def main():
             try: return gaia.vm_event(opcode)
             finally: gaia.sock.settimeout(old)
         try:
-            sock.connect(('00:00:00:00:00:00',1))
+            sock.connect((bluetooth_address(),1))
             if query('version',0x280,vendor=0x494)!=bytes.fromhex('00000500050000'):
                 raise ValueError('Expected firmware5.5.0 not confirmed')
             if query('bootMode',0x282)!=b'\0\0': raise ValueError('Not in normal boot mode')

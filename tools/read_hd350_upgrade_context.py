@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Read HD 350BT ConfigStore upgrade context key 4; never mutate it."""
+from local_device import bluetooth_address
 import argparse
 import json
 from pathlib import Path
@@ -25,7 +26,7 @@ def main():
         if not 1 <= args.channel <= 30:
             raise ValueError('RFCOMM channel must be 1..30')
         result['rfcommChannel'] = args.channel
-        sock.connect(('00:00:00:00:00:00', args.channel))
+        sock.connect((bluetooth_address(), args.channel))
         for name, vendor, command, payload in (
                 ('version', 0x494, 0x280, b''),
                 ('bootMode', 10, 0x282, b''),

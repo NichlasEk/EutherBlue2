@@ -3,6 +3,7 @@
 
 No feature setters, PS stores, reset, partition opens, or upgrade commands.
 """
+from local_device import bluetooth_address
 import argparse
 import json
 from pathlib import Path
@@ -24,7 +25,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
-    result = {'address': '00:00:00:00:00:00', 'transactions': [], 'replies': {}}
+    result = {'address': bluetooth_address(), 'transactions': [], 'replies': {}}
     with args.output.open('x') as capture:
         sock = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
         sock.settimeout(5)

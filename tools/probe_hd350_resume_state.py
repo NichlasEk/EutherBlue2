@@ -7,6 +7,7 @@ then removes this experiment's context and reboots. cleanup only removes it.
 No DATA, START_DATA, TRANSFER_COMPLETE_RES, COMMIT, ABORT or ERASE packets.
 Original absence is documented in the named capture; no generic key writer.
 """
+from local_device import bluetooth_address
 import argparse
 import json
 import os
@@ -112,7 +113,7 @@ def main():
             if q('keyAfterDelete',0x710,b'\0\4')!=b'\5':raise ValueError('Deletion not verified')
             ok('resetAfterCleanup',0x202,b'\0')
         try:
-            s.connect(('00:00:00:00:00:00',1))
+            s.connect((bluetooth_address(),1))
             if q('version',0x280,vendor=0x494)!=bytes.fromhex('00000500050000'):raise ValueError('Wrong firmware')
             if q('mode',0x282)!=b'\0\0':raise ValueError('Not normal boot mode')
             before=q('keyBefore',0x710,b'\0\4')

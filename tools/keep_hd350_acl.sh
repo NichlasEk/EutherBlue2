@@ -2,6 +2,10 @@
 # Keep the HD 350BT upgrade HID writable across its controlled USB re-enumeration.
 set -eu
 
+target_user=${SUDO_USER:-${USER:-}}
+[ -n "$target_user" ] && [ "$target_user" != root ] || { echo "Run with sudo from your regular user account" >&2; exit 1; }
+id "$target_user" >/dev/null
+
 count=0
 # Ten minutes covers the complete re-arm/apply/power-on/commit cycle while
 # remaining narrowly scoped to the HD 350BT upgrade interface.
@@ -17,7 +21,7 @@ while [ "$count" -lt 6000 ]; do
         case "$hid_id" in
             0003:00001377:00006012|0003:00000A12:00004007)
                 case "$hid_phys" in
-                    */input2) setfacl -m u:LOCAL_USER:rw "/dev/$node" 2>/dev/null || true ;;
+                    */input2) setfacl -m "u:$target_user:rw" "/dev/$node" 2>/dev/null || true ;;
                 esac
                 ;;
         esac

@@ -4,6 +4,7 @@
 OPEN_FILE 0621 mode00, READ_FILE0624, CLOSE_FILE0628 follow ADK gaia.c.
 An open read stream is volatile state; always attempt close after success.
 """
+from local_device import bluetooth_address
 import argparse
 import hashlib
 import json
@@ -62,7 +63,7 @@ def main():
     args = parser.parse_args()
     if not 1 <= args.channel <= 30:
         raise ValueError('RFCOMM channel must be 1..30')
-    result = {'address': '00:00:00:00:00:00', 'file': 'prompts/10.prm', 'transactions': []}
+    result = {'address': bluetooth_address(), 'file': 'prompts/10.prm', 'transactions': []}
     result['rfcommChannel'] = args.channel
     # Reserve capture before any device operation.
     with args.output.open('x') as capture:

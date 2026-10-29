@@ -2,7 +2,8 @@
 
 Verktyg och modellprofiler för att undersöka, bygga och verifiera anpassade
 röstprompter i Bluetooth-headset. **UGREEN Studio Pro / HP206** är den första
-fysiskt fungerande profilen.
+fysiskt fungerande profilen. HD 350BT har också verifierats med egen röst
+och bekräftad USB-commit på firmware 5.5.0.
 
 ## Bekräftat
 
@@ -15,9 +16,29 @@ fysiskt fungerande profilen.
 - Firmwarefilsystemet innehåller separata engelska och kinesiska promptbibliotek. De engelska filerna inkluderar bland annat `power_on.wts`, `power_off.wts`, `bt_conn.wts`, `low_power.wts`, `anc_on.wts` och `anc_off.wts`.
 - `.wts` är JieLis WTGv2/SILK-baserade ljudformat. JieLis officiella Windowsverktyg kan avkoda filerna till WAV via Wine.
 
-Byggverktygen skriver enbart lokala filer. Repot innehåller ingen automatisk
-Bluetooth- eller OTA-flashning; den verifierade HP206-filen installerades
-manuellt med den pinnade Android-klienten.
+Byggverktygen skriver lokala filer. HD 350BT-verktygen kan också ändra
+uppdateringsstatus, skriva firmware och byta bank via Bluetooth/USB.
+De är experimentella och bygger på ett verifierat exemplar med firmware 5.5.0;
+resultatet gäller inte automatiskt andra modeller eller firmwareversioner.
+Den verifierade HP206-filen installerades manuellt med Android-klienten.
+
+## Lokal konfiguration och HD 350BT
+
+Sätt `EUTHERBLUE_HD350_ADDRESS` till adressen för ditt eget headset före
+Bluetooth-prover. Ingen personlig enhetsadress följer med koden.
+UGREEN-verktygen kräver `--address`. Röstprofilerna pekar på en lokal referens
+under `~/EutherVox`; ändra `reference` till din egen referensfil vid behov.
+Kör ACL-vakten med sudo från ditt vanliga konto; den använder `SUDO_USER`.
+
+Se [verifierat resultat](HANDOFF.md) och [forskningsloggen](reports/hd350bt-research-2026-10-28.md).
+Den fungerande sekvensen avslutar commit på första USB-gränssnittet efter
+bankbytet. Den kräver lokala fångster från motsvarande staging och återarmning;
+publicerade skript är inte ett generellt installationspaket. Alla 13 prompter
+byggdes, men varje separat händelse är inte lyssningstestad.
+
+Firmware, dumpar, appfiler, nyckelmaterial, ljud och modellvikter ingår inte.
+MIT-licensen gäller projektets egen kod och dokumentation, inte externa
+komponenter. Externa verktyg och indata omfattas av sina respektive villkor.
 
 ## Modellprofiler
 
@@ -45,13 +66,13 @@ Läs headsetets installerade produkt-firmware med UGREENs enda tillåtna
 `GET_VERSION`-kommando:
 
 ```bash
-./tools/read_ugreen_version.py --query
+./tools/read_ugreen_version.py --address "$EUTHERBLUE_UGREEN_ADDRESS" --query
 ```
 
 Läs JieLi-kretsens transport- och OTA-egenskaper separat:
 
 ```bash
-./tools/read_device_info.py --query
+./tools/read_device_info.py --address "$EUTHERBLUE_UGREEN_ADDRESS" --query
 ```
 
 Versionsfältet från det senare kommandot är JieLi-SDK:ns generiska målversion och

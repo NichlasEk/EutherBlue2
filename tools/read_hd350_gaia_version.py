@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """One HD350 product-version GET over the SDP-confirmed GAIA RFCOMM channel."""
+from local_device import bluetooth_address
 import argparse
 import json
 from pathlib import Path
@@ -13,7 +14,7 @@ def main():
     args = parser.parse_args()
     if args.output.exists():
         raise ValueError('capture exists')
-    address = '00:00:00:00:00:00'
+    address = bluetooth_address()
     request = bytes.fromhex('ff01000004940280')
     result = {'address': address, 'channel': 1, 'requestHex': request.hex(), 'received': []}
     sock = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)

@@ -5,6 +5,7 @@ The tool is pinned to the captured 19-word context and refuses every other
 input.  It neither transfers image data nor sends footer, abort, commit,
 transfer-complete, erase, or bank-swap commands.
 """
+from local_device import bluetooth_address
 import argparse
 import hashlib
 import json
@@ -93,7 +94,7 @@ def main():
         try:
             result['rfcommChannel'] = args.channel
             save()
-            sock.connect(('00:00:00:00:00:00', args.channel))
+            sock.connect((bluetooth_address(), args.channel))
             if query('version', 0x280, vendor=0x494) != bytes.fromhex('00000500050000'):
                 raise ValueError('expected product firmware 5.5.0 not confirmed')
             if query('bootMode', 0x282) != b'\0\0':

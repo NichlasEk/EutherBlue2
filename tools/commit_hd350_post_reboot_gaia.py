@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Complete the exact HD 350BT d5f037da post-reboot session over GAIA."""
+from local_device import bluetooth_address
 
 import argparse
 import json
@@ -119,7 +120,7 @@ def main() -> int:
                 candidate.settimeout(2)
                 result["connectionAttempts"] += 1
                 try:
-                    candidate.connect(("00:00:00:00:00:00", args.channel))
+                    candidate.connect((bluetooth_address(), args.channel))
                     sock = candidate
                     gaia = ObserveGaia(sock, result["transactions"])
                     result["connectedAtMonotonic"] = time.monotonic()

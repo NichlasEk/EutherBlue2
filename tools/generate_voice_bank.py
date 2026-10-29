@@ -120,7 +120,7 @@ def main() -> int:
     args = parser.parse_args()
 
     config = json.loads(args.config.read_text(encoding="utf-8"))
-    reference = Path(config["reference"])
+    reference = Path(config["reference"]).expanduser()
     if not reference.is_file():
         parser.error(f"referensrösten saknas: {reference}")
     output_dir = args.output_dir or Path("artifacts/previews") / config["id"] / "full-bank"

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Change only resume word 13 from 0 to 2 for an exactly captured staged image."""
+from local_device import bluetooth_address
 
 import argparse
 import hashlib
@@ -89,7 +90,7 @@ def main() -> int:
             return reply
 
         try:
-            sock.connect(("00:00:00:00:00:00", args.channel))
+            sock.connect((bluetooth_address(), args.channel))
             if query("version", 0x280, vendor=0x494) != bytes.fromhex("00000500050000"):
                 raise ValueError("firmware 5.5.0 not confirmed")
             if query("bootMode", 0x282) != b"\0\0":

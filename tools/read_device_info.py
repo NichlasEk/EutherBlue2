@@ -285,7 +285,7 @@ def run_query(address: str, timeout_seconds: float) -> dict[str, Any]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Read-only JieLi RCSP target-info probe over SPP")
-    parser.add_argument("--address", default="00:00:00:00:00:00")
+    parser.add_argument("--address", required=True)
     parser.add_argument("--timeout", type=float, default=8.0)
     parser.add_argument("--output", type=Path)
     parser.add_argument(

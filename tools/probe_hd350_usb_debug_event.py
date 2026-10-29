@@ -7,6 +7,7 @@ Handler inclusion on stock is NOT established. Reference changes cached permissi
 only, still requires challenge-response, and loses permission on curator reset.
 No upgrade data, PS store, reset, unlock-key write, or opcode sweep.
 """
+from local_device import bluetooth_address
 import argparse
 import gzip
 import hashlib
@@ -64,7 +65,7 @@ def main():
         sock = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
         sock.settimeout(5)
         try:
-            sock.connect(('00:00:00:00:00:00', 1))
+            sock.connect((bluetooth_address(), 1))
             gaia = Gaia(sock, result['transactions'])
             if gaia.query(0x0494, 0x0280) != bytes.fromhex('00000500050000'):
                 raise ValueError('Expected firmware5.5.0 not confirmed')

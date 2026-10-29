@@ -124,6 +124,7 @@ def main() -> int:
     parser.add_argument("--timeout", type=int, default=900)
     args = parser.parse_args()
 
+    args.reference = args.reference.expanduser()
     if not args.reference.is_file():
         parser.error(f"referensrösten saknas: {args.reference}")
     args.output_dir.mkdir(parents=True, exist_ok=True)

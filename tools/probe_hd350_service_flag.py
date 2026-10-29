@@ -5,6 +5,7 @@ PS_SIZE_ADJ in the matched GAIA handler halves the protocol word count again
 on this octet-addressed target. Restore uses padding to request two PS words;
 readback is mandatory before reset. No general key/value interface.
 """
+from local_device import bluetooth_address
 import argparse
 import json
 import os
@@ -37,7 +38,7 @@ def main():
         s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
         s.settimeout(5)
         try:
-            s.connect(('00:00:00:00:00:00', 1)); g = Gaia(s, r['transactions'])
+            s.connect((bluetooth_address(), 1)); g = Gaia(s, r['transactions'])
             def query(name, command, data=b'', vendor=10):
                 v = g.query(vendor, command, data)
                 r['replies'][name] = v.hex(); save(); return v

@@ -4,6 +4,7 @@
 Does not restore PS contents or write firmware. It needs live RFCOMM access;
 the existence of this tool is not proof of recovery from hidden USB mode.
 """
+from local_device import bluetooth_address
 import argparse
 import json
 from pathlib import Path
@@ -27,7 +28,7 @@ def main():
         sock = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
         sock.settimeout(5)
         try:
-            sock.connect(('00:00:00:00:00:00', 1))
+            sock.connect((bluetooth_address(), 1))
             gaia = Gaia(sock, result['transactions'])
             version = gaia.query(0x0494, 0x0280)
             result['version'] = version.hex()
