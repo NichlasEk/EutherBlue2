@@ -6,6 +6,7 @@ BootSetMode(2). It is not a flash unlock. Normal-mode recovery via GAIA0202/00
 is statically identified, but has not been tested from this hidden mode.
 No opcode sweep, flash data, automatic retries, or automatic recovery.
 """
+from local_device import service_address_bytes
 import argparse
 import hashlib
 import json
@@ -82,7 +83,7 @@ def main():
             address = identity(fd, 0x19)
             result['versionReply'] = version.hex()
             result['addressReply'] = address.hex()
-            if version[8:11] != b'550' or address[3:9] != bytes.fromhex('000000000000'):
+            if version[8:11] != b'550' or address[3:9] != service_address_bytes():
                 raise ValueError('Expected firmware/address not confirmed')
             result['modeWriteAttempted'] = True
             save()  # Journal before the one mutation; interrupted write is unknown.

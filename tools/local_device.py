@@ -8,3 +8,9 @@ def bluetooth_address(variable="EUTHERBLUE_HD350_ADDRESS"):
     if not re.fullmatch(r"(?:[0-9A-F]{2}:){5}[0-9A-F]{2}", value) or value == "00:00:00:00:00:00":
         raise ValueError(f"Set {variable} to your headset Bluetooth address before connecting")
     return value
+
+
+def service_address_bytes():
+    """Service identity layout: three LAP bytes, UAP, then two NAP bytes."""
+    address = bytes.fromhex(bluetooth_address().replace(":", ""))
+    return address[3:] + address[2:3] + address[:2]

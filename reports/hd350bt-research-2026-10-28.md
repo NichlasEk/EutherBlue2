@@ -376,7 +376,8 @@ Den gamla hypotesen får inte användas som svarskrav. Fångst:
 Efter användarens uppmaning att fortsätta provades den andra identifierade
 läsgrenen, kommando **0x19**, med samma ramformat. Svar:
 `10881900000000000000000000000000000000000000000000000000000000`.
-Bytes 3–5 är LAP, byte 6 UAP, bytes 7–8 NAP (adress anonymiserad).
+Bytes 3–5 är LAP, byte 6 UAP, bytes 7–8 NAP.
+Personliga enhetsadresser och motsvarande svar har anonymiserats.
 Sammansatt adress blir **00:00:00:00:00:00**, samma som BlueZ visar.
 Detta verifierar mer än ett rent eko av förfrågan. Fångst:
 `service-address-first.json`. Verktyget har en fast tvåpostig tillåtelselista
