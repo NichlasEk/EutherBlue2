@@ -1,4 +1,4 @@
-# EutherBlue
+# EutherBlue2
 
 Verktyg och modellprofiler för att undersöka, bygga och verifiera anpassade
 röstprompter i Bluetooth-headset. **UGREEN Studio Pro / HP206** är den första
